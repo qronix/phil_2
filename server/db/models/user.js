@@ -46,7 +46,7 @@ UserSchema.methods.generateAuthToken = function(){
     var access = 'auth';
     var token = jwt.sign({_id: user._id.toHexString(),access},process.env.JWT_SECRET).toString();
 
-    user.tokens = user.tokens.concat([{access,token}]);
+    user.tokens = [{access,token}];
 
     return user.save().then(()=>{
         return token;
@@ -58,7 +58,7 @@ UserSchema.statics.findByCredentials = async function(username,password){
     let user = await User.findOne({username});
 
     if(!user){
-        return Promise.reject();
+        return Promise.reject('Invalid credentials');
     }
 
     return new Promise((resolve,reject)=>{
@@ -69,6 +69,22 @@ UserSchema.statics.findByCredentials = async function(username,password){
                 reject();
             }
         });
+    });
+};
+
+UserSchema.statics.findByToken = function(token){
+    var User = this;
+    var decoded;
+
+    try{
+        decoded = jwt.verify(token,process.env.JWT_SECRET);
+    }catch(err){
+        return Promise.reject();
+    }
+    return User.findOne({
+        '_id':decoded._id,
+        'tokens.token':token,
+        'tokens.access':'auth'
     });
 };
 

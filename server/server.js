@@ -7,7 +7,8 @@ const port = process.env.PORT;
 
 const {mongoose} = require('./db/mongoose');
 const {User} = require('./db/models/user');
-
+const {authenticate} = require('./middleware/authenticate');
+const validator = require('validator');
 
 var app = express();
 var partialDir = __dirname + './../views/partials';
@@ -18,29 +19,38 @@ console.log(`Public dir: ${__dirname + './../public'}`);
 app.use(bodyParser.json());
 
 
-
-
-
-
-
-
+//todo check for auth token and redirect automatically
 //login route
-
 app.post('/users/login',async(req,res)=>{
     try{
         const body = (_.pick(req.body,["username","password"]));
-        const user = await User.findByCredentials(body.username,body.password);
-        const token = await user.generateAuthToken();
-        res.set({'x-auth': token});
-        res.set({'x-username':user.username});
-        res.set({'x-_id':user._id});
-        res.render('dashboard.hbs',{
-            pageTitle:"PHIL v2.0 | Dashboard"
-        });
+        if(validator.isAlphanumeric(body.username)){
+            const user = await User.findByCredentials(body.username,body.password);
+            if(!user){
+                throw new Error('Invalid credentials');
+            }
+            const token = await user.generateAuthToken();
+            res.set({'x-auth': token});
+            res.set({'x-username':user.username});
+            res.set({'x-_id':user._id});
+            res.render('dashboard.hbs',{
+                pageTitle:"PHIL v2.0 | Dashboard"
+            });
+            console.log('all good');
+        }else{
+            throw new Error('Username is not valid');
+        }
     }catch(err){
-        res.status(400).send();
+        if(err.message){
+            console.log(`Sending: ${err.message}`);
+            res.status(400).send({error:err.message});
+        }else{
+            console.log(`Sending: ${err}`);
+            res.status(400).send({error:err});
+        }
     }
 });
+
 
 
 //create user route
@@ -57,7 +67,6 @@ app.post('/users',async (req,res)=>{
 });
 
 //home page
-
 app.get('/',(req,res)=>{
     res.render('home.hbs',{
         pageTitle:"PHIL v2.0 | Login"
@@ -65,7 +74,7 @@ app.get('/',(req,res)=>{
 });
 
 //dashboard
-
+app.get('/dashboard',authenticate)
 
 
 

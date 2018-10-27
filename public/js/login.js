@@ -1,15 +1,34 @@
 let loginButton = document.getElementById('loginSubmitButton');
 
 loginButton.addEventListener('click',(event)=>{
-    console.log('logging in');
     login();
     event.preventDefault();
 });
 
-var login=()=>{
-    let username = document.getElementById('userName').value;
-    let password = document.getElementById('password').value;
+var login = async ()=>{
+    let usernameInput = document.getElementById('userName');
+    let passwordInput = document.getElementById('password');
+    let username = usernameInput.value;
+    let password = passwordInput.value;
 
-    console.log(`Username: ${username} and password: ${password}`);
-    displayNotification(123,'Test message').catch((err)=>console.log(err));
+    if(isRealString(username) && isRealString(password)){
+        try{
+            axios.post(window.location + 'users/login',{
+                username,
+                password
+            }).then(function(response){
+                document.open();
+                document.write(response.data);
+                document.close();
+            }).catch(function(error){
+                let err = JSON.parse(JSON.stringify(error));
+                let errorMessage = err.response.data.error;
+                displayNotification('error',errorMessage).catch((err)=>console.log(err));
+            });
+        }catch(err){
+            displayNotification('error',err.message).catch((err)=>console.log(err));
+        }
+    }
+    usernameInput.value="";
+    passwordInput.value="";
 }
