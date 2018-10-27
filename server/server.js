@@ -31,8 +31,9 @@ app.post('/users/login',async(req,res)=>{
         const body = (_.pick(req.body,["username","password"]));
         const user = await User.findByCredentials(body.username,body.password);
         const token = await user.generateAuthToken();
-        res.header('x-auth',token).send(user);
-        res.status(200).send();
+        res.set({'x-auth': token});
+        res.set({'x-username':user.username});
+        res.set({'x-_id':user._id});
         res.render('dashboard.hbs',{
             pageTitle:"PHIL v2.0 | Dashboard"
         });

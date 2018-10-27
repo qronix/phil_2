@@ -33,6 +33,14 @@ var UserSchema = new mongoose.Schema({
     }]
 });
 
+UserSchema.methods.toJSON = function(){
+    var user = this;
+
+    var userObject = user.toObject();
+
+    return _.pick(userObject,['_id','username']);
+}
+
 UserSchema.methods.generateAuthToken = function(){
     var user = this;
     var access = 'auth';
@@ -43,7 +51,26 @@ UserSchema.methods.generateAuthToken = function(){
     return user.save().then(()=>{
         return token;
     });
-}
+};
+
+UserSchema.statics.findByCredentials = async function(username,password){
+    var User = this;
+    let user = await User.findOne({username});
+
+    if(!user){
+        return Promise.reject();
+    }
+
+    return new Promise((resolve,reject)=>{
+        bcrypt.compare(password,user.password,(err,result)=>{
+            if(result){
+                resolve(user);
+            }else{
+                reject();
+            }
+        });
+    });
+};
 
 UserSchema.pre('save',function(next){
     var user = this;
@@ -64,4 +91,4 @@ var User = mongoose.model('User',UserSchema);
 
 module.exports={
     User
-}
+};
