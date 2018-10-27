@@ -11,4 +11,5 @@ var login=()=>{
     let password = document.getElementById('password').value;
 
     console.log(`Username: ${username} and password: ${password}`);
+    displayNotification('error','Test error message');
 }

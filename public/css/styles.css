@@ -26,9 +26,35 @@ body{
 
 /***********Notificaiton Panel*********************/
 
+#notificationPanel{
+    position: absolute;
+    left:50%;
+    margin-left:-20vw;
+    top:0;
+    text-align: center;
+    width: 40vw;
+    padding: 10px;
+    border: 1px solid white;
+    box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.6);
+    color:white;
+}
 
+/* .notificationDisplayed{
+    visibility: visible;
+} */
+.notificationHidden{
+    visibility: hidden;
+}
 .errorMessage{
-    background-color: 
+    background-color: #ff6b6b;
+}
+
+.warningMessage{
+    background-color: #feca57;
+}
+
+.successMessage{
+    background-color: #1dd1a1;
 }
 
 /***********END Notificaiton Panel*****************/
@@ -43,7 +69,7 @@ body{
 }
 
 #loginForm{
-    margin: 0 calc(45% - 100px);
+    margin: 0 auto;
     max-width: 320px;
     margin-top: 40vh;
     display: flex;
