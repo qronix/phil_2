@@ -2,22 +2,29 @@ let notificationPanel = document.getElementById('notificationPanel');
 notificationPanel.classList.toggle('notificationHidden');
 
 async function displayNotification(msgType,message){
-    switch(msgType){
-        case "error":{
+    if(isRealString(message)&&isRealString(msgType)){
+        if(msgType==='error'){
             notificationPanel.classList.add('errorMessage');
+        }else if(msgType ==='warning'){
+            notificationPanel.classList.add('warningMessage');
+        }else if(msgType === 'success'){
+            notificationPanel.classList.add('successMessage');
+        }else{
+            notificationPanel.classList.add('warningMessage');
         }
+    
+        notificationPanel.innerText = message;
+        notificationPanel.classList.toggle('notificationHidden');
+        await msgDisplayTimer();
+        resetPanel();
+    }else{
+        throw new Error('Message or message type sent to notifcation system is not a string');
     }
-    notificationPanel.classList.toggle('notificationHidden');
-    console.log('showing message');
-    await msgDisplayTimer();
-    resetPanel();
-    console.log('hiding message');
 }
 
 function msgDisplayTimer(){
     return new Promise((resolve,reject)=>{
         let id = setTimeout(()=>{clearTimeout(id);resolve();},2000);
-
     });
 }
 

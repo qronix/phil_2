@@ -5,6 +5,10 @@ const _= require('lodash');
 const hbs = require('hbs');
 const port = process.env.PORT;
 
+const {mongoose} = require('./db/mongoose');
+const {User} = require('./db/models/user');
+
+
 var app = express();
 var partialDir = __dirname + './../views/partials';
 hbs.registerPartials(partialDir);
@@ -22,7 +26,34 @@ app.use(bodyParser.json());
 
 //login route
 
+app.post('/users/login',async(req,res)=>{
+    try{
+        const body = (_.pick(req.body,["username","password"]));
+        const user = await User.findByCredentials(body.username,body.password);
+        const token = await user.generateAuthToken();
+        res.header('x-auth',token).send(user);
+        res.status(200).send();
+        res.render('dashboard.hbs',{
+            pageTitle:"PHIL v2.0 | Dashboard"
+        });
+    }catch(err){
+        res.status(400).send();
+    }
+});
+
+
 //create user route
+app.post('/users',async (req,res)=>{
+    try{
+        console.log(_.pick(req.body,["username","password"]));
+        const user = new User(_.pick(req.body,["username","password"]));
+        await user.save();
+        const token = await user.generateAuthToken();
+        res.header('x-auth',token).send(user);
+    }catch(err){
+        res.status(400).send(err);
+    }
+});
 
 //home page
 
