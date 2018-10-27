@@ -10,6 +10,7 @@ var partialDir = __dirname + './../views/partials';
 hbs.registerPartials(partialDir);
 app.set('view engine','hbs');
 app.use(express.static(__dirname + './../public'));
+console.log(`Public dir: ${__dirname + './../public'}`);
 app.use(bodyParser.json());
 
 

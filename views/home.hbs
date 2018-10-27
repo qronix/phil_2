@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <html>
 {{> header}}
-<body>
-    <div>
-        Does this work?
+    <div id='loginPanel'>
+        <div id='loginForm'>
+            <div class="loginControlRow">
+                <label for='userName'>Username</label>
+                <input type="text" id='userName' required="required" autofocus="autofocus"/>
+            </div>
+            <div class="loginControlRow">
+                <label for='password'>Password</label>
+                <input type="password" id='password' required="required">
+            </div>
+            <button id='loginSubmitButton'>Login</button>
+        </div>
     </div>
+    <script src='/js/login.js'></script>
 </body>
 </html>
