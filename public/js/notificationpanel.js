@@ -1,6 +1,8 @@
-let notificationPanel = document.getElementById('notificationPanel');
-notificationPanel.classList.toggle('notificationHidden');
+if(!notificationPanel){
+    let notificationPanel = document.getElementById('notificationPanel');
 
+}
+notificationPanel.classList.toggle('notificationHidden');
 async function displayNotification(msgType,message){
     if(isRealString(message)&&isRealString(msgType)){
         if(msgType==='error'){

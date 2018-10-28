@@ -19,9 +19,23 @@ console.log(`Public dir: ${__dirname + './../public'}`);
 app.use(bodyParser.json());
 
 
+// process.on('unhandledRejection',(reason,p)=>{
+//     let promise = JSON.stringify(p,undefined,2);
+//     console.log(`Unhandled rejection at: ${promise} reason: ${reason}`);
+// });
+
 //todo check for auth token and redirect automatically
 //login route
-app.post('/users/login',async(req,res)=>{
+app.post('/users/login',authenticate,async(req,res)=>{
+    if(req.user){
+        res.set({'x-username':req.user.username});
+        res.set({'x-_id':req.user._id});
+        res.render('dashboard.hbs',{
+            pageTitle:"PHIL v2.0 | Dashboard",
+            username:req.user.username
+        });
+        return console.log('Logged in via token');
+    }
     try{
         const body = (_.pick(req.body,["username","password"]));
         if(validator.isAlphanumeric(body.username)){
@@ -34,7 +48,8 @@ app.post('/users/login',async(req,res)=>{
             res.set({'x-username':user.username});
             res.set({'x-_id':user._id});
             res.render('dashboard.hbs',{
-                pageTitle:"PHIL v2.0 | Dashboard"
+                pageTitle:"PHIL v2.0 | Dashboard",
+                username:user.username
             });
             console.log('all good');
         }else{
@@ -42,11 +57,18 @@ app.post('/users/login',async(req,res)=>{
         }
     }catch(err){
         if(err.message){
+            //TODO: send only errors which are not server informative
             console.log(`Sending: ${err.message}`);
-            res.status(400).send({error:err.message});
+            if(err.message==='Invalid credentials'){
+                res.status(401).send({error:err.message});
+            }else{
+                res.status(401).send('An error occured');
+            }
+
         }else{
             console.log(`Sending: ${err}`);
-            res.status(400).send({error:err});
+            // res.status(400).send({error:err});
+            res.status(400).send();
         }
     }
 });

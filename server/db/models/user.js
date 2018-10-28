@@ -66,7 +66,7 @@ UserSchema.statics.findByCredentials = async function(username,password){
             if(result){
                 resolve(user);
             }else{
-                reject();
+                reject('Invalid credentials');
             }
         });
     });
