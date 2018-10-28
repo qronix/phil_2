@@ -38,7 +38,7 @@ app.post('/users/login',authenticate,async(req,res)=>{
     }
     try{
         const body = (_.pick(req.body,["username","password"]));
-        if(validator.isAlphanumeric(body.username)){
+        if((userCheck=validator.isAlphanumeric(body.username)) && validator.isLength(body.password,1)){
             const user = await User.findByCredentials(body.username,body.password);
             if(!user){
                 throw new Error('Invalid credentials');
@@ -53,22 +53,31 @@ app.post('/users/login',authenticate,async(req,res)=>{
             });
             console.log('all good');
         }else{
-            throw new Error('Username is not valid');
+            if(!userCheck && body.password.length < 1){
+                throw new Error('Invalid credentials');
+            }
+            if(!userCheck){
+                throw new Error('Username is invalid');
+            }else{
+                throw new Error('Password is invalid');
+            }
         }
     }catch(err){
         if(err.message){
             //TODO: send only errors which are not server informative
-            console.log(`Sending: ${err.message}`);
-            if(err.message==='Invalid credentials'){
+            if(err.message==='Invalid credentials' || err.message==='Username is invalid' || 
+                err.message === 'Password is invalid'){
                 res.status(401).send({error:err.message});
             }else{
                 res.status(401).send('An error occured');
             }
-
         }else{
             console.log(`Sending: ${err}`);
-            // res.status(400).send({error:err});
-            res.status(400).send();
+            if(err==='Invalid credentials'){
+                res.status(400).send({error:err});
+            }else{
+                res.status(400).send();
+            }
         }
     }
 });

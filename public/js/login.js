@@ -10,7 +10,6 @@ var login = async ()=>{
     let passwordInput = document.getElementById('password');
     let username = usernameInput.value;
     let password = passwordInput.value;
-
     if(isRealString(username) && isRealString(password)){
         try{
             axios.post(window.location + 'users/login',{
@@ -23,10 +22,19 @@ var login = async ()=>{
             }).catch(function(error){
                 let err = JSON.parse(JSON.stringify(error));
                 let errorMessage = err.response.data.error;
-                displayNotification('error',errorMessage).catch((err)=>console.log(err));
+                Notification.displayNotification('error',errorMessage).catch((err)=>console.log(err));
             });
         }catch(err){
-            displayNotification('error',err.message).catch((err)=>console.log(err));
+             Notification.displayNotification('error',err.message).catch((err)=>console.log(err));
+        }
+    }else{
+        if(!isRealString(username)&&!isRealString(password)){
+             Notification.displayNotification("error","Credentials cannot be blank").catch((err)=>console.log(err));
+        }
+        else if(!isRealString(username)){
+             Notification.displayNotification('error',"Username is invalid").catch((err)=>console.log(err));
+        }else if(!isRealString(password)){
+             Notification.displayNotification('error',"Password is invalid").catch((err)=>console.log(err));
         }
     }
     usernameInput.value="";
