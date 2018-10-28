@@ -12,6 +12,7 @@ const {authenticate} = require('./middleware/authenticate');
 const {verifycookies} = require('./middleware/verifycookies');
 const validator = require('validator');
 const signedCookieSecret = '!@@!#12vvF123424!@VV!124415142';
+// !@@!#12vvF123424!@VV!124415142
 
 var app = express();
 var partialDir = __dirname + './../views/partials';
@@ -113,14 +114,12 @@ app.get('/',(req,res)=>{
 });
 
 //dashboard
-app.get('/dashboard/',(req,res)=>{
-    // let signedCookies = JSON.stringify(req.signedCookies,undefined,2);
-    let signedCookies = cookieParser.JSONCookies(JSON.stringify(req.signedCookies,undefined,2));
-    let cookies = JSON.parse(signedCookies);
-    // let signedCookies = cookieParser.signedCookies(req.signedCookies,signedCookieSecret);
-    console.log(`Signed cookies: ${signedCookies}`);
-    console.log(`Username cookie:${cookies.username}`);
-    // console.log(`Signed Cookies: ${JSON.stringify(req.signedCookies,undefined,2)}`);
+app.get('/dashboard',[verifycookies,authenticate], async (req,res)=>{
+    try{
+        console.log(`Got user: ${req.user}`);
+    }catch(err){
+        console.log(`Got err: ${err}`);
+    }
 });
 
 
