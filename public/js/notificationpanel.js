@@ -44,16 +44,16 @@
 // }
 
 
-
 class Notification{
     static init(){
         this.notificationPanel = document.getElementById('notificationPanel');
-        this.notificationPanel.classList.toggle('notificationHidden');
+        // this.notificationPanel.classList.add('notificationHidden');
         this.displayingMessage = false;
         console.log('init done');
     }
     static async displayNotification(msgType,message){
         if(!this.displayingMessage){
+            Notification.init();
             this.msgType = msgType;
             this.message = message;
             this.displayingMessage = true;
@@ -70,7 +70,7 @@ class Notification{
                 }
             
                 this.notificationPanel.innerText = this.message;
-                this.notificationPanel.classList.toggle('notificationHidden');
+                this.notificationPanel.classList.remove('notificationHidden');
                 await this.msgDisplayTimer();
                 this.resetPanel();
             }else{
@@ -84,6 +84,7 @@ class Notification{
         return new Promise((resolve,reject)=>{
             let id = setTimeout(()=>{
                 clearTimeout(id);resolve();
+                this.notificationPanel.classList.remove('notificationHidden');
                 this.displayingMessage = false;
                 console.log(`Displaying message: ${this.displayingMessage}`);
             },2000);
@@ -96,5 +97,3 @@ class Notification{
         this.notificationPanel.classList.remove('successMessage');
     }
 }
-
-console.log(Notification.init());

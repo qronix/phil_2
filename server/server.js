@@ -1,6 +1,7 @@
 require('./config/config');
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const _= require('lodash');
 const hbs = require('hbs');
 const port = process.env.PORT;
@@ -8,7 +9,9 @@ const port = process.env.PORT;
 const {mongoose} = require('./db/mongoose');
 const {User} = require('./db/models/user');
 const {authenticate} = require('./middleware/authenticate');
+const {verifycookies} = require('./middleware/verifycookies');
 const validator = require('validator');
+const signedCookieSecret = '!@@!#12vvF123424!@VV!124415142';
 
 var app = express();
 var partialDir = __dirname + './../views/partials';
@@ -17,7 +20,7 @@ app.set('view engine','hbs');
 app.use(express.static(__dirname + './../public'));
 console.log(`Public dir: ${__dirname + './../public'}`);
 app.use(bodyParser.json());
-
+app.use(cookieParser(signedCookieSecret)); //signed cookie secret
 
 // process.on('unhandledRejection',(reason,p)=>{
 //     let promise = JSON.stringify(p,undefined,2);
@@ -26,16 +29,7 @@ app.use(bodyParser.json());
 
 //todo check for auth token and redirect automatically
 //login route
-app.post('/users/login',authenticate,async(req,res)=>{
-    if(req.user){
-        res.set({'x-username':req.user.username});
-        res.set({'x-_id':req.user._id});
-        res.render('dashboard.hbs',{
-            pageTitle:"PHIL v2.0 | Dashboard",
-            username:req.user.username
-        });
-        return console.log('Logged in via token');
-    }
+app.post('/users/login',async(req,res)=>{
     try{
         const body = (_.pick(req.body,["username","password"]));
         if((userCheck=validator.isAlphanumeric(body.username)) && validator.isLength(body.password,1)){
@@ -44,14 +38,18 @@ app.post('/users/login',authenticate,async(req,res)=>{
                 throw new Error('Invalid credentials');
             }
             const token = await user.generateAuthToken();
-            res.set({'x-auth': token});
-            res.set({'x-username':user.username});
-            res.set({'x-_id':user._id});
-            res.render('dashboard.hbs',{
-                pageTitle:"PHIL v2.0 | Dashboard",
-                username:user.username
-            });
-            console.log('all good');
+            res.cookie('username',user.username,{signed:true});
+            res.cookie('token',token,{signed:true});
+
+            res.redirect(`/dashboard`);
+
+            // res.header('x-username',user.username);
+            // res.header('x-_id',user._id);
+            // res.render('dashboard.hbs',{
+            //     pageTitle:"PHIL v2.0 | Dashboard",
+            //     username:user.username
+            // });
+            // console.log('all good');
         }else{
             if(!userCheck && body.password.length < 1){
                 throw new Error('Invalid credentials');
@@ -99,13 +97,31 @@ app.post('/users',async (req,res)=>{
 
 //home page
 app.get('/',(req,res)=>{
-    res.render('home.hbs',{
-        pageTitle:"PHIL v2.0 | Login"
-    });
+    if(req.user){
+        res.set({'x-username':req.user.username});
+        res.set({'x-_id':req.user._id});
+        res.render('dashboard.hbs',{
+            pageTitle:"PHIL v2.0 | Dashboard",
+            username:req.user.username
+        });
+        return console.log('Logged in via token');
+    }else{
+        res.render('home.hbs',{
+            pageTitle:"PHIL v2.0 | Login"
+        });
+    }
 });
 
 //dashboard
-app.get('/dashboard',authenticate)
+app.get('/dashboard/',(req,res)=>{
+    // let signedCookies = JSON.stringify(req.signedCookies,undefined,2);
+    let signedCookies = cookieParser.JSONCookies(JSON.stringify(req.signedCookies,undefined,2));
+    let cookies = JSON.parse(signedCookies);
+    // let signedCookies = cookieParser.signedCookies(req.signedCookies,signedCookieSecret);
+    console.log(`Signed cookies: ${signedCookies}`);
+    console.log(`Username cookie:${cookies.username}`);
+    // console.log(`Signed Cookies: ${JSON.stringify(req.signedCookies,undefined,2)}`);
+});
 
 
 
