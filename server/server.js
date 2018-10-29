@@ -9,7 +9,6 @@ const port = process.env.PORT;
 const {mongoose} = require('./db/mongoose');
 const {User} = require('./db/models/user');
 const {authenticate} = require('./middleware/authenticate');
-const {verifycookies} = require('./middleware/verifycookies');
 const validator = require('validator');
 const signedCookieSecret = '!@@!#12vvF123424!@VV!124415142';
 // !@@!#12vvF123424!@VV!124415142
@@ -43,7 +42,7 @@ app.post('/users/login',async(req,res)=>{
             res.cookie('token',token,{signed:true});
 
             res.redirect(`/dashboard`);
-            
+
         }else{
             if(!userCheck && body.password.length < 1){
                 throw new Error('Invalid credentials');
