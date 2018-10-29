@@ -24,6 +24,64 @@ body{
 }
 
 
+/************SIDEBAR***************/
+
+#sidebar{
+    border:1px solid black;
+    height: 100vh;
+    float: left;
+    margin: 0 auto;
+    width: 10%;
+
+}
+
+.sideNavLink{
+    text-decoration: none;
+    position: relative;
+    top: 1px;
+    font-weight: 300;
+    font-size: 1.1em;
+    color: #f5f6fa;
+    /* padding: 10px 0px 10px 10px; */
+    letter-spacing: 0.1em;
+}
+
+#sideNav i{
+    flex: 0.4;
+    color:#0087E5;
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.6);
+    font-size: 1.2em;
+    /* padding-right:5px; */
+    padding-left: 10px;
+}
+.sideNavRow{
+   display: flex;
+   margin-top: 5px;
+   /* border:1px solid red; */
+}
+.sideNavRow *{
+    
+    display: flex;
+    /* justify-content: center; */
+    align-items: flex-end;
+}
+
+/************END SIDEBAR***********/
+
+/************DASHBOARD***************/
+
+#dashboard{
+    border:1px solid purple;
+    height: 100vh;
+    float: left;
+    margin: 0 auto;
+    width: 90%;
+}
+
+
+/************END DASHBOARD***********/
+
+
 /***********Notificaiton Panel*********************/
 
 #notificationPanel{
