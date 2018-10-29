@@ -11,6 +11,7 @@ const {User} = require('./db/models/user');
 const {authenticate} = require('./middleware/authenticate');
 const validator = require('validator');
 const signedCookieSecret = '!@@!#12vvF123424!@VV!124415142';
+const {grabPromos} = require('./utils/grabpromos');
 // !@@!#12vvF123424!@VV!124415142
 
 var app = express();
@@ -22,6 +23,8 @@ console.log(`Public dir: ${__dirname + './../public'}`);
 app.use(bodyParser.json());
 app.use(cookieParser(signedCookieSecret)); //signed cookie secret
 
+
+// hbs.registerHelper('getPromos',grabPromos());
 // process.on('unhandledRejection',(reason,p)=>{
 //     let promise = JSON.stringify(p,undefined,2);
 //     console.log(`Unhandled rejection at: ${promise} reason: ${reason}`);

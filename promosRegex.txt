@@ -1,0 +1,8 @@
+Offer tag - <h2 class="header v-fw-medium">Google Pixel Offer</h2>
+
+Regex - <h2 class="header v-fw-medium">(?<offer>([^<]*))<\/h2>
+
+Offer description - <h3 class="undefined v-fw-medium">Buy 1 Pixel 3 and get 1 on Verizon</h3>
+
+Regex - <h3 class="undefined v-fw-medium">(?<desc>([^<]*))<\/h3>
+
