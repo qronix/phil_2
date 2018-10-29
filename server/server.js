@@ -43,14 +43,7 @@ app.post('/users/login',async(req,res)=>{
             res.cookie('token',token,{signed:true});
 
             res.redirect(`/dashboard`);
-
-            // res.header('x-username',user.username);
-            // res.header('x-_id',user._id);
-            // res.render('dashboard.hbs',{
-            //     pageTitle:"PHIL v2.0 | Dashboard",
-            //     username:user.username
-            // });
-            // console.log('all good');
+            
         }else{
             if(!userCheck && body.password.length < 1){
                 throw new Error('Invalid credentials');
@@ -97,14 +90,9 @@ app.post('/users',async (req,res)=>{
 });
 
 //home page
-app.get('/',(req,res)=>{
+app.get('/',authenticate,(req,res)=>{
     if(req.user){
-        res.set({'x-username':req.user.username});
-        res.set({'x-_id':req.user._id});
-        res.render('dashboard.hbs',{
-            pageTitle:"PHIL v2.0 | Dashboard",
-            username:req.user.username
-        });
+        res.redirect('/dashboard');
         return console.log('Logged in via token');
     }else{
         res.render('home.hbs',{
@@ -114,9 +102,16 @@ app.get('/',(req,res)=>{
 });
 
 //dashboard
-app.get('/dashboard',[verifycookies,authenticate], async (req,res)=>{
+app.get('/dashboard',authenticate, async (req,res)=>{
     try{
-        console.log(`Got user: ${req.user}`);
+        if(req.user){
+            res.render('dashboard.hbs',{
+                pageTitle:"PHIL v2.0 | Dashboard",
+                username:req.user.username
+            });
+        }else{
+            res.redirect('/');
+        }
     }catch(err){
         console.log(`Got err: ${err}`);
     }

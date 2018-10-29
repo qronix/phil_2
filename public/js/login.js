@@ -16,14 +16,16 @@ var login = async ()=>{
                 username,
                 password
             }).then(function(response){
-                document.open();
-                document.write(response.data);
-                document.close();
+                // document.open();
+                // document.write(response.data);
+                // document.close();
+                window.location.href += 'dashboard';
+                console.log(response);
             }).catch(function(error){
                 let err = JSON.parse(JSON.stringify(error));
                 let errorMessage = err.response.data.error;
                 Notification.displayNotification('error',errorMessage).catch((err)=>console.log(err));
-            });
+            })
         }catch(err){
              Notification.displayNotification('error',err.message).catch((err)=>console.log(err));
         }
