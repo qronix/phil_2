@@ -24,14 +24,102 @@ body{
 }
 
 
+
+
+/***************USER PANEL***********************/
+
+
+
+#userPanel{
+    margin: 0 auto;
+    /* border:1px solid red; */
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#tableHeader{
+    
+    background-color: rgb(117, 118, 119);
+    /* border:1px solid green; */
+}
+#tableHeader,
+.userRow{
+    display: flex;
+    flex: 1 1 100%;
+    justify-content: space-between;
+}
+#tableHeader span,
+.userRow span{
+    /* border: 1px solid blue; */
+}
+#tableHeader span{
+    border-bottom: 1px solid white;
+
+}
+#tableHeader span:not(:nth-child(1)){
+    padding-left: 5px;
+    border-left: 1px solid white;
+}
+
+#tableHeader span,
+.userRow  span{
+    flex: 1 1 25%;
+    color:#f5f6fa;
+}
+
+.userRow span{
+    padding:10px 5px 0px;
+    border-bottom: 1px solid white;
+}
+.userRow span:not(:nth-child(1)){
+    border-left: 1px solid white;
+}
+.userRow :nth-child(odd){
+    background-color: #002640;
+}
+.userRow :nth-child(even){
+    background-color: #004B7F;
+}
+
+.userInfo{
+    position: relative;
+    padding-bottom: 5px;
+    margin: 0;
+}
+
+.userInfo *{
+    background-color: #002640 !important;
+}
+.userInfo a{
+    color:#0087E5;
+    text-decoration: none;
+    transition:0.2s color ease;
+}
+.userInfo a:hover{
+    color:#FFF200;
+}
+.userInfo :nth-child(1){
+    margin-right: 10px;
+}
+.userInfo :nth-child(2){
+    margin-left: 10px;
+}
+
+
+
+/***************END USER PANEL*******************/
+
+
 /************SIDEBAR***************/
 
+/* Clean this mess up */
 #sidebar{
     border:1px solid black;
     height: 100vh;
     float: left;
     margin: 0 auto;
-    width: 10%;
+    width: 10vw;
+    max-width: 125px;
 
 }
 
@@ -102,12 +190,12 @@ body{
 
 /************DASHBOARD***************/
 
+/* Need media query for large screen size */
 #dashboard{
     border:1px solid purple;
     height: 100vh;
-    float: left;
-    margin: 0 auto;
-    width: 90%;
+    margin-left: 10vw;
+    width: 90vw;
 }
 
 

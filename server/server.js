@@ -82,7 +82,7 @@ app.post('/users/login',async(req,res)=>{
 app.post('/users',async (req,res)=>{
     try{
         console.log(_.pick(req.body,["username","password"]));
-        const user = new User(_.pick(req.body,["username","password"]));
+        const user = new User(_.pick(req.body,["username","email","role","password","name"]));
         await user.save();
         const token = await user.generateAuthToken();
         res.header('x-auth',token).send(user);
@@ -103,6 +103,45 @@ app.get('/',authenticate,(req,res)=>{
     }
 });
 
+//home -> redirect to dashboard
+app.get('/home',async (req,res)=>{
+    res.redirect('/dashboard');
+});
+
+
+app.get('/phones',authenticate,async (req,res)=>{
+    try{
+        if(req.user){
+            res.render('phones.hbs',{
+                pageTitle: "PHIL v2.0 | Phones",
+                username:req.user.username
+            });
+        }else{
+            res.redirect('/');
+        }
+    }catch(err){
+        console.log(`Got err: ${err}`);
+    }
+});
+
+//users
+app.get('/users',authenticate,async (req,res)=>{
+    try{
+        if(req.user){
+            let users = await User.find({}).select({"tokens":0,"password":0,"__v":0});
+            res.render('users.hbs',{
+                pageTitle: "PHIL v2.0 | Phones",
+                username:req.user.username,
+                users
+            });
+        }else{
+            res.redirect('/');
+        }
+    }catch(err){
+        console.log(`Got err: ${err}`);
+    }
+});
+
 //dashboard
 app.get('/dashboard',authenticate, async (req,res)=>{
     try{
@@ -119,7 +158,19 @@ app.get('/dashboard',authenticate, async (req,res)=>{
     }
 });
 
-
+//logout
+app.get('/signout',authenticate,async(req,res)=>{
+    try{
+        if(req.user){
+            await req.user.removeToken(req.token);
+            res.redirect('/');
+        }else{
+            res.redirect('/');
+        }
+    }catch(err){
+        console.log(`Got err: ${err}`);
+    }
+});
 
 app.listen(port,()=>{
     console.log(`Server started on port: ${port}`);

@@ -16,10 +16,32 @@ var UserSchema = new mongoose.Schema({
             message:'{VALUE} is not alphanumeric'
         }
     },
+    email:{
+        type:String,
+        required:true,
+        trim:true,
+        unique:true,
+        validate:{
+            validator:validator.isEmail,
+            message:'{VALUE} is not a valid email'
+        }
+    },
+    name:{
+        type:String,
+        required:true,
+        trim:true,
+        unique:true
+    },
+    role:{
+        type:String,
+        required:true,
+        trim:true,
+        default:'user'
+    },
     password:{
         type:String,
         require:true,
-        minlength:8,
+        minlength:4,
     },
     tokens:[{
         access:{
@@ -69,6 +91,29 @@ UserSchema.statics.findByCredentials = async function(username,password){
                 reject('Invalid credentials');
             }
         });
+    });
+};
+
+// UserSchema.methods.removeToken = function(token){
+//     var user = this;
+//     console.log(`Removing token: ${token}`);
+//     return user.update({
+//         $pull:{
+//             token:{
+//                 token
+//             }
+//         }
+//     });
+// };
+
+UserSchema.methods.removeToken = function(token){
+    var user = this;
+    return user.update({
+        $pull:{
+            tokens:{
+                token
+            }
+        }
     });
 };
 

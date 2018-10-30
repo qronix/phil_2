@@ -1,0 +1,16 @@
+<div id='userPanel'>
+    <div id='tableHeader'>
+        <span>Username</span>
+        <span>Name</span>
+        <span>Email</span>
+        <span>Role</span>
+    </div>
+    {{# each users}}
+    <div class="userRow">
+        <span>{{this.username}}<div class="userInfo"><a href="#">Edit</a>|<a href="#">Permissions</a></div></span>
+        <span>{{this.name}}</span>
+        <span>{{this.email}}</span>
+        <span>{{this.role}}</span> 
+    </div>
+    {{/each}}
+</div>
