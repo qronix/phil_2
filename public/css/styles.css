@@ -51,13 +51,33 @@ body{
     color:#FFF200;
 }
 
-#sideNav i{
-    flex: 0.4;
+.sideNavRow i{
+    /* flex: 0.4; */
+    /* border:1px solid red; */
     color:#0087E5;
     text-shadow: 1px 1px rgba(0, 0, 0, 0.6);
     font-size: 1.2em;
     /* padding-right:5px; */
     padding-left: 10px;
+}
+#homeIcon{
+    flex:0.28;
+    position: relative;
+    left: -3px;
+}
+#signoutIcon{
+    flex:0.36;
+}
+#usersIcon{
+    flex:0.27;
+}
+#phoneIcon{
+    flex:0.4;
+    font-size: 1.4em;
+    /* color:pink !important; */
+}
+.sideNavRow span{
+    flex: 0.5;
 }
 .sideNavRow{
    display: flex;
