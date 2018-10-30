@@ -7,7 +7,7 @@
     </div>
     {{# each users}}
     <div class="userRow">
-        <span>{{this.username}}<div class="userInfo"><a href="#">Edit</a>|<a href="#">Permissions</a></div></span>
+        <span>{{this.username}}<div class="userInfo"><a href="/users/{{this.id}}">Edit</a>|<a href="#">Permissions</a></div></span>
         <span>{{this.name}}</span>
         <span>{{this.email}}</span>
         <span>{{this.role}}</span> 

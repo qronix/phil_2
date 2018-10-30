@@ -142,6 +142,9 @@ app.get('/users',authenticate,async (req,res)=>{
     }
 });
 
+app.get('/users/:id',authenticate,async (req,res)=>{
+});
+
 //dashboard
 app.get('/dashboard',authenticate, async (req,res)=>{
     try{
