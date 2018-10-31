@@ -1,6 +1,8 @@
 function initSideBar(){
     let dashboard = document.getElementById('dashboard');
     let linkTargets = document.querySelectorAll('.sideNavRow');
+    let sideBar = document.getElementById('side-bar');
+    let sideRows = document.querySelectorAll('.sideNavRow');
 
     linkTargets.forEach((target)=>{
         let endpoint = target.getAttribute('id').split('L')[0];
@@ -20,5 +22,47 @@ function initSideBar(){
                 event.preventDefault();
             }
         });
+    });
+    // sideRows.forEach((row)=>{
+    //     row.addEventListener('mouseover',(event)=>{
+    //         sideBar.style.width = '100px';
+    //         dashboard.style.marginLeft = '100px';
+    //         toggleLinks();
+    //     });
+    // });
+    // sideRows.forEach((row)=>{
+    //     row.addEventListener('mouseleave',(event)=>{
+    //         toggleLinks();
+    //         sideBar.style.width = '50px';
+    //         dashboard.style.marginLeft = '50px';
+    //     });
+    // });
+    sideBar.addEventListener('mouseenter',(event)=>{
+        console.log('on sidebar');
+        sideBar.style.width = '200px';
+        // dashboard.style.marginLeft = '200px';
+        toggleLinks();
+
+    });
+    sideBar.addEventListener('mouseleave',(event)=>{
+        console.log('left sidebar');        
+        toggleLinks();
+        sideBar.style.width = '50px';
+        dashboard.style.marginLeft = '50px';
+    });
+}
+
+function toggleLinks(){
+    let sideLinks = document.querySelectorAll('.sideNavLink');
+    let icons = document.querySelectorAll('.navIcon');
+    let phoneIcon = document.getElementById('phoneIcon');
+    
+    phoneIcon.classList.toggle('phoneIconShift');
+    icons.forEach((icon)=>{
+        icon.classList.toggle('floatLeft');
+    });
+    
+    sideLinks.forEach((link)=>{
+        link.classList.toggle('hidden');
     });
 }

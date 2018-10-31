@@ -99,6 +99,7 @@ app.post('/role',authenticate,async(req,res)=>{
     try{
         if(req.user){
             const role = await Role.findOne({rolename:req.user.role});
+            console.log(role);
             if(role.permissions.addrole){
                 const role = new Role(_.pick(req.body,["rolename","permissions"]));
                 await role.save();

@@ -113,77 +113,73 @@ body{
 /************SIDEBAR***************/
 
 /* Clean this mess up */
-#sidebar{
-    border:1px solid black;
+/* Done! */
+
+#side-bar{
+    position: fixed;
+    width: 50px;
     height: 100vh;
     float: left;
-    margin: 0 auto;
-    width: 10vw;
-    max-width: 125px;
-
-}
-
-.sideNavLink{
-    text-decoration: none;
-    position: relative;
-    top: 1px;
-    font-weight: 300;
-    font-size: 1.1em;
-    color: #f5f6fa;
-    /* padding: 10px 0px 10px 10px; */
-    letter-spacing: 0.1em;
-    transition: 0.3s all;
-}
-.sideNavLink:hover{
-    /* text-shadow: 0px 0px 10px rgb(224, 240, 81); */
-    color:#FFF200;
+    border:1px solid black;
+    text-align: center;
+    background-color: #222;
+    opacity: 0.9;
+    z-index: 999;
 }
 
 .sideNavRow i{
-    /* flex: 0.4; */
-    /* border:1px solid red; */
+    padding: 10px;
     color:#0087E5;
-    text-shadow: 1px 1px rgba(0, 0, 0, 0.6);
-    font-size: 1.2em;
-    /* padding-right:5px; */
-    padding-left: 10px;
-}
-#homeIcon{
-    flex:0.28;
-    position: relative;
-    left: -3px;
-}
-#signoutIcon{
-    flex:0.36;
-}
-#usersIcon{
-    flex:0.27;
-}
-#phoneIcon{
-    flex:0.4;
+    transition: color 0.3s ease;
     font-size: 1.4em;
-    /* color:pink !important; */
 }
-.sideNavRow span{
-    flex: 0.5;
+
+.floatLeft{
+    float: left;
 }
+
+.sideNavRow i:hover{
+    color: #FFF200;
+}
+
 .sideNavRow{
-   display: flex;
-   margin-top: 5px;
-   margin-bottom: 15px;
-   user-select: none;
-   /* border:1px solid red; */
-   transition: 0.4s all;
+    display: block;
+    text-align: center;
+    justify-content: center;
+    overflow-x: hidden;
+    cursor: pointer;
 }
-.sideNavRow:hover{
-    /* color:#FFF200; */
-    /* transform:scale(0.9); */
+.sideNavRow :hover{
+    color:#FFF200;
 }
-.sideNavRow *{
-    
-    display: flex;
-    /* justify-content: center; */
-    align-items: flex-end;
+.sideNavLink{
+    position: relative;
+    top:10px;
+    float: left;
+    text-align: left;
+    color: #f5f6fa;
+    opacity: 1 !important;
+}
+#phonesText{
+    padding-left: 6px;
+}
+#usersText{
+    padding-left: 4px;
+}
+#homeText{
+    padding-left:-4px;
+}
+.phoneIconShift{
+   margin-left: 4px;
+}
+#signoutLink{
+    position: relative;
+    top:3vh;
+
+}
+.hidden{
+    visibility: hidden;
+    display: none;
 }
 
 /************END SIDEBAR***********/
@@ -192,10 +188,9 @@ body{
 
 /* Need media query for large screen size */
 #dashboard{
-    border:1px solid purple;
+    /* border:1px solid purple; */
     height: 100vh;
-    margin-left: 10vw;
-    width: 90vw;
+    padding: 20px 40px 0px 40px;
 }
 
 

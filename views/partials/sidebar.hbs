@@ -1,4 +1,4 @@
-<div id='sidebar'>
+{{!-- <div id='sidebar'>
     <div id='sideNav'>
         <div class="sideNavRow" id='homeLink'>
             <i class="fas fa-home" id='homeIcon'></i></i><span class='sideNavLink'>Home</span>
@@ -9,9 +9,33 @@
         <div class="sideNavRow" id='usersLink'>
             <i class="fa fa-user" aria-hidden="true" id='usersIcon'></i><span class='sideNavLink'>Users</span>
         </div>
+        <div class="sideNavRow" id='usersLink'>
+            <i class="fa fa-user" aria-hidden="true" id='usersIcon'></i><span class='sideNavLink'>Users</span>
+        </div>
         <div class="sideNavRow" id='signoutLink'>
             <i class="fas fa-sign-out-alt" id='signoutIcon'></i></i><span class='sideNavLink'>Logout</span>
         </div>
     </div>
 </div>
+<script type="text/javascript" src="/js/sidebar.js"></script> --}}
+
+<nav id="side-bar"class="navbar">
+    <div id="side-menu" class="side-nav">
+        <div class="sideNavRow" id='homeLink'>
+            <i class="fas fa-home navIcon" id='homeIcon'></i><span class='sideNavLink hidden' id="homeText">Home</span>
+        </div>
+        <div class="sideNavRow" id='phonesLink'>
+            <i class="fas fa-mobile-alt navIcon" id="phoneIcon"></i>
+            <span class='sideNavLink hidden' id="phonesText">Phones</span>
+        </div>
+        <div class="sideNavRow" id='usersLink'>
+            <i class="fa fa-user navIcon" aria-hidden="true" id='usersIcon'></i>
+            <span class='sideNavLink hidden' id="usersText">Users</span>
+        </div>
+        <div class="sideNavRow" id='signoutLink'>
+            <i class="fas fa-sign-out-alt navIcon" id='signoutIcon'></i>
+            <span class='sideNavLink hidden'>Logout</span>
+        </div>
+    </div>
+</nav>
 <script type="text/javascript" src="/js/sidebar.js"></script>
