@@ -132,7 +132,7 @@ body{
     color: #f5f6fa;
     /* padding: 10px 0px 10px 10px; */
     letter-spacing: 0.1em;
-    transition: 0.2s all;
+    transition: 0.3s all;
 }
 .sideNavLink:hover{
     /* text-shadow: 0px 0px 10px rgb(224, 240, 81); */
@@ -173,11 +173,11 @@ body{
    margin-bottom: 15px;
    user-select: none;
    /* border:1px solid red; */
-   transition: 0.2s all;
+   transition: 0.4s all;
 }
 .sideNavRow:hover{
-    color:#FFF200;
-    transform:scale(0.9);
+    /* color:#FFF200; */
+    /* transform:scale(0.9); */
 }
 .sideNavRow *{
     

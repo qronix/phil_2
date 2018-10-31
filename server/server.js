@@ -8,6 +8,7 @@ const port = process.env.PORT;
 
 const {mongoose} = require('./db/mongoose');
 const {User} = require('./db/models/user');
+const {Role} = require('./db/models/role');
 const {authenticate} = require('./middleware/authenticate');
 const validator = require('validator');
 const signedCookieSecret = '!@@!#12vvF123424!@VV!124415142';
@@ -79,6 +80,7 @@ app.post('/users/login',async(req,res)=>{
 
 
 //create user route
+// TODO check if user role is valid
 app.post('/users',async (req,res)=>{
     try{
         console.log(_.pick(req.body,["username","password"]));
@@ -88,6 +90,25 @@ app.post('/users',async (req,res)=>{
         res.header('x-auth',token).send(user);
     }catch(err){
         res.status(400).send(err);
+    }
+});
+
+//POST /role
+
+app.post('/role',authenticate,async(req,res)=>{
+    try{
+        if(req.user){
+            const role = await Role.findOne({rolename:req.user.role});
+            if(role.permissions.addrole){
+                const role = new Role(_.pick(req.body,["rolename","permissions"]));
+                await role.save();
+                res.status(200).send('Successfully added role');
+            }else{
+                res.status(401).send('You do not have persmission to add this role');
+            }
+        }
+    }catch(err){
+        console.log(err);
     }
 });
 
@@ -142,7 +163,15 @@ app.get('/users',authenticate,async (req,res)=>{
     }
 });
 
+//users/:id
 app.get('/users/:id',authenticate,async (req,res)=>{
+    try{
+        if(req.user){
+            console.log(`Username is: ${req.user.username}`);
+        }
+    }catch(err){
+        console.log(`Got err: ${err}`);
+    }
 });
 
 //dashboard
@@ -160,6 +189,8 @@ app.get('/dashboard',authenticate, async (req,res)=>{
         console.log(`Got err: ${err}`);
     }
 });
+
+
 
 //logout
 app.get('/signout',authenticate,async(req,res)=>{
