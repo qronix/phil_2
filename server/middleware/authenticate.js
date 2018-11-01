@@ -1,4 +1,6 @@
 var {User} = require('./../db/models/user');
+var {Role} = require('./../db/models/role');
+
 var cookieParser = require('cookie-parser');
 
 var authenticate = async (req,res,next)=>{
@@ -7,11 +9,21 @@ var authenticate = async (req,res,next)=>{
     if(cookies.token && cookies.username){
         try{
             let user = await User.findByToken(cookies.token);
-            req.user = user;
-            req.token = cookies.token;
-            next();
+            if(user){
+                if(user.enabled){
+                    let role = await Role.findOne({rolename:user.role});
+                    req.role = role;
+                    req.user = user;
+                    req.token = cookies.token;
+                    next();
+                }else{
+                   res.redirect('/');
+                }
+            }else{
+                next();
+            }
         }catch(err){
-            Promise.reject('User was not found');
+            Promise.reject(err);
         }
     }else{
         next();

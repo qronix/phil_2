@@ -24,6 +24,9 @@ console.log(`Public dir: ${__dirname + './../public'}`);
 app.use(bodyParser.json());
 app.use(cookieParser(signedCookieSecret)); //signed cookie secret
 
+hbs.registerHelper('isRole',function (addingRole,userRole,stuff){
+    return addingRole === userRole;
+});
 
 // hbs.registerHelper('getPromos',grabPromos());
 // process.on('unhandledRejection',(reason,p)=>{
@@ -168,10 +171,21 @@ app.get('/users',authenticate,async (req,res)=>{
 app.get('/users/:id',authenticate,async (req,res)=>{
     try{
         if(req.user){
-            console.log(`Username is: ${req.user.username}`);
+            const id = req.params.id;
+            let editingUser = await User.findById(id);
+            let roles = await Role.find().select({"rolename":1,"_id":0});
+            res.render('useredit.hbs',{
+                username:editingUser.username,
+                email:editingUser.email,
+                name:editingUser.name,
+                role:editingUser.role,
+                roles
+            });
         }
     }catch(err){
         console.log(`Got err: ${err}`);
+        // res.redirect('/dashboard');
+        res.send(`Cannot edit user`);
     }
 });
 
@@ -179,9 +193,12 @@ app.get('/users/:id',authenticate,async (req,res)=>{
 app.get('/dashboard',authenticate, async (req,res)=>{
     try{
         if(req.user){
+            let {viewphones,viewusers} = req.role.permissions;
             res.render('dashboard.hbs',{
                 pageTitle:"PHIL v2.0 | Dashboard",
-                username:req.user.username
+                username:req.user.username,
+                viewphones,
+                viewusers
             });
         }else{
             res.redirect('/');

@@ -47,7 +47,6 @@
 class Notification{
     static init(){
         this.notificationPanel = document.getElementById('notificationPanel');
-        // this.notificationPanel.classList.add('notificationHidden');
         this.displayingMessage = false;
         console.log('init done');
     }

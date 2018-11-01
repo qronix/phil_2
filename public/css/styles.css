@@ -105,6 +105,49 @@ body{
     margin-left: 10px;
 }
 
+#usereditPanel{
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    max-width: 20vw;
+}
+#usereditPanel label{
+    color:#f5f6fa;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+#usereditPanel label:not(:nth-child(1)){
+    margin-top:14px;
+}
+#usereditPanelButtons{
+    margin: 0 auto;
+    margin-top: 20px;
+}
+#usereditPanelButtons button{
+    text-align: center;
+    padding: 3px 10px;
+    border-radius: 6px;
+    border: 1px solid white;
+    background-color: #222;
+    transition:color,background-color 0.3s ease;
+}
+
+#cancel{
+    margin-right: 20px;
+    color:#c0392b;
+}
+#cancel:hover{
+    background-color: #c0392b;
+    color:#f5f6fa;
+}
+#submit{
+    color:#f5f6fa;
+}
+#submit:hover{
+    background-color: #1dd1a1;
+    color:#f5f6fa;
+}
 
 
 /***************END USER PANEL*******************/
@@ -276,18 +319,17 @@ body{
     font-weight: 700;
 }
 #loginSubmitButton{
-    padding: 4px 10px 4px 10px;
-    border:1px solid black;
-    border-radius: 3px;
+    padding: 3px 10px;
+    border:1px solid white;
+    border-radius: 6px;
     margin-top: 10%;
-    color:black;
-    background-color:#FFF200;
-    transition: 0.2s all ease;
+    color:#f5f6fa;
+    background-color:#222;
+    transition: color , background-color 0.3s  ease;
 }
 
 #loginSubmitButton:hover{
-    background-color: #E5DA00;
-    color:white;
+    color: #FFF200;
 }
 #loginSubmitButton:active{
     color:#0087E5;
