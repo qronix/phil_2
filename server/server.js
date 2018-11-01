@@ -177,6 +177,7 @@ app.get('/users/:id',authenticate,async (req,res)=>{
             res.render('useredit.hbs',{
                 username:editingUser.username,
                 email:editingUser.email,
+                userid:editingUser._id,
                 name:editingUser.name,
                 role:editingUser.role,
                 roles
