@@ -1,15 +1,15 @@
-<div id='usereditPanel'>
+<form id='usereditPanel'>
     <span hidden="hidden" id="userid">{{userid}}</span>
     <label for='username'>Username</label>
     <input id='username' type="text" value="{{username}}" required="required">
     <label for="name">Name</label>
     <input id='name' type="text" value="{{name}}" required="required">
-    <label for='emal'>Email</label>
+    <label for='email'>Email</label>
     <input type="email" id='email' required="required" value="{{email}}">
     <label for='password'>Password</label>
-    <input type="password" id='password' required="required">
-    <label for='passwordConfirm'>Confirm password</label>
-    <input type="password" id='confirmPassword' required="required">
+    <input type="password" id='password' placeholder="unchanged">
+    <label for='confirmPassword'>Confirm password</label>
+    <input type="password" id='confirmPassword' placeholder="unchanged">
     <label for='role'>Role (Currently: {{role}})</label>
     <select id='role'>
        {{# each roles}}
@@ -20,4 +20,4 @@
         <button id='cancel' onclick="cancelEdit(event,this)">Cancel</button>
         <button id='submit' onclick="submitUserEdit(event,this)">Save</button>
     </div>
-</div>
+</form>

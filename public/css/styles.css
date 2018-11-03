@@ -107,6 +107,7 @@ body{
 
 #usereditPanel{
     margin: 0 auto;
+    margin-top:5vh;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
