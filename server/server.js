@@ -209,7 +209,22 @@ app.get('/dashboard',authenticate, async (req,res)=>{
     }
 });
 
-
+app.patch('/users/:id',authenticate, async (req,res)=>{
+    try{
+        if(req.user){
+            let role = await Role.findOne({"rolename":req.user.role});
+            if(role.permissions.edituser){
+                console.log('Can edit users');
+            }else{
+                console.log('No permission');
+            }
+        }else{
+            console.log('User not found');
+        }
+    }catch(err){
+        console.log(err);
+    }
+});
 
 //logout
 app.get('/signout',authenticate,async(req,res)=>{
