@@ -104,7 +104,7 @@ app.post('/role',authenticate,async(req,res)=>{
         if(req.user){
             const role = await Role.findOne({rolename:req.user.role});
             console.log(role);
-            if(role.permissions.addrole){
+            if(role.permissions.addrole[0]){
                 const role = new Role(_.pick(req.body,["rolename","permissions"]));
                 await role.save();
                 res.status(200).send('Successfully added role');
@@ -151,15 +151,19 @@ app.get('/phones',authenticate,async (req,res)=>{
 });
 
 //users
-app.get('/users',authenticate,async (req,res)=>{
+app.get('/users',authenticate, async (req,res)=>{
     try{
         if(req.user){
             let users = await User.find({}).select({"tokens":0,"password":0,"__v":0});
-            res.render('users.hbs',{
-                pageTitle: "PHIL v2.0 | Phones",
-                username:req.user.username,
-                users
-            });
+            let role = await Role.findOne({rolename:req.user.role});
+            if(role.permissions.viewusers[0]){
+                res.render('users.hbs',{
+                    pageTitle: "PHIL v2.0 | Phones",
+                    username:req.user.username,
+                    canedit:role.permissions.edituser[0],
+                    users
+                });
+            }
         }else{
             res.redirect('/');
         }
@@ -198,11 +202,12 @@ app.get('/dashboard',authenticate, async (req,res)=>{
     try{
         if(req.user){
             let {viewphones,viewusers} = req.role.permissions;
+            console.log(`Can view users: ${viewusers[0]}`);
             res.render('dashboard.hbs',{
                 pageTitle:"PHIL v2.0 | Dashboard",
                 username:req.user.username,
-                viewphones,
-                viewusers
+                viewphones:viewphones[0],
+                viewusers:viewusers[0]
             });
         }else{
             res.redirect('/');
@@ -212,13 +217,45 @@ app.get('/dashboard',authenticate, async (req,res)=>{
     }
 });
 
+app.delete('/users/:id',authenticate, async(req,res)=>{
+    try{
+        if(req.user){
+            let role = await Role.findOne({"rolename":req.user.role});
+            if(role.permissions.deleteuser[0]){
+                if(!ObjectID.isValid(req.params.id)){
+                    return res.status(400).send('Invalid user id');
+                }
+                if(req.params.id!==req.user._id){
+                    User.findByIdAndDelete(req.params.id).then((user)=>{
+                        if(user){
+                            res.status(200).send('User has been deleted');
+                        }
+                    })
+                    .catch((err)=>{
+                        throw new Error('Cannot delete user');
+                    });
+                }else{
+                    res.status(401).send('Cannot delete your own account');
+                }
+            }else{
+                res.status(401).send('You do not have permission for that');
+            }
+        }
+    }catch(err){
+        res.status(400).send('Cannot delete user');
+    }
+});
+
+
 app.patch('/users/:id',authenticate, async (req,res)=>{
     try{
         if(req.user){
             let role = await Role.findOne({"rolename":req.user.role});
-            if(role.permissions.edituser){
+            console.log(`User role is: ${role.permissions.edituser}`);
+            if(role.permissions.edituser[0]){
+                console.log('Editing user');
                 if(!ObjectID.isValid(req.params.id)){
-                    res.send('Invalid user id');
+                    return res.status(400).send('Invalid user id');
                 }
                 let data = req.body.data;
                 let id = req.params.id;
@@ -229,13 +266,13 @@ app.patch('/users/:id',authenticate, async (req,res)=>{
                 await User.updateUser(id,data);
                 res.send('User has been updated');
             }else{
-                res.send('You do not have permission to do that')
+                return res.status(401).send('You do not have permission to do that')
             }
         }else{
-            res.send('User was not found');
+            return res.status(400).send('User was not found');
         }
     }catch(err){
-        res.send('An error occurred');
+        return res.status(400).send('An error occurred');
     }
 });
 

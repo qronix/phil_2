@@ -40,14 +40,15 @@ function submitUserEdit(event,ele){
                         document.getElementById('usersLink').click();
                     },2000);
                 }
-            }).catch(err=>{
-                throw new Error('Could not update user');
+            }).catch((err)=>{
+                console.log(err.data);
+                Notification.displayNotification('error',err.response.data);
             });
     }catch(err){
         Notification.displayNotification('error',err);
     }
     event.preventDefault();
-    ele.disabled = false;
+    ele.disabled = true;
 }
 
 function getFormData(){
