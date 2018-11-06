@@ -27,16 +27,12 @@ function cancelEdit(event,ele){
 
 async function submitUserEdit(event,ele){
     try{
-        if(checkpasswords()){
             let data = getFormData();
             let dashboard = document.getElementById('dashboard');
             let userid = document.getElementById('userid');
 
             let response = await axios.patch(`/users/${userid}`,{
             });
-        }else{
-            throw new Error('Password confirmation failed');
-        }
     }catch(err){
         Notification.displayNotification('error',err);
     }
@@ -49,35 +45,36 @@ function getFormData(){
         targets.forEach((input)=>{
             let id = input.getAttribute('id');
             let value = input.value;
-            if(id !=='password' && id!=='confirmPassword'){
+            if(id !=='password' && id !=='confirmPassword'){
                 if(value!==''){
                     data[id] = value;
                 }else{
                     let idCaps = id[0].toUpperCase() + id.split(id[0])[1];
                     throw new Error(`${idCaps} cannot be blank`);
                 }
+            }else{
+                data[id] = input.value; 
             }
         });
         data.role = document.getElementById('role').value;
-        console.log(data);
+        data = checkpasswords(data);
+        return data;
     }catch(err){
         Notification.displayNotification('error',err.message);
     }
 }
 
-function checkpasswords(){
-    let passwordInput = document.getElementById('password').value;
-    let confirmPassword = document.getElementById('confirmPassword').value;
-
-    if(passwordInput!==''||confirmPassword!==''){
-        if(passwordInput!==confirmPassword){
-            Notification.displayNotification('error','Passwords do not match');
-            return false;
+function checkpasswords(data){
+    let {password,confirmPassword} = data;
+    if(password!==''||confirmPassword!==''){
+        if(password!==confirmPassword){
+            // Notification.displayNotification('error','Passwords do not match');
+            throw new Error('Passwords do not match.');
         }else{
-            return true;
+            return data;
         }
     }else{
-        return true;
+        return data;
     }
 }
 
