@@ -10,6 +10,14 @@
     <input type="password" id='password' placeholder="unchanged">
     <label for='confirmPassword'>Confirm password</label>
     <input type="password" id='confirmPassword' placeholder="unchanged">
+    <div id='enabledPanel'>
+        <label for='enabled' id='enabledLabel'>Enabled</label>
+    {{#if enabled}}
+        <input type="checkbox" id='enableUserCheck' checked="checked">
+    {{else}}
+        <input type="checkbox" id='enableUserCheck'>
+    {{/if}}
+    </div>
     <label for='role'>Role (Currently: {{role}})</label>
     <select id='role'>
        {{# each roles}}

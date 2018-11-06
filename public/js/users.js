@@ -25,17 +25,29 @@ function cancelEdit(event,ele){
     event.preventDefault();
 }
 
-async function submitUserEdit(event,ele){
+function submitUserEdit(event,ele){
     try{
+            ele.disabled = true;
             let data = getFormData();
             let dashboard = document.getElementById('dashboard');
-            let userid = document.getElementById('userid');
-
-            let response = await axios.patch(`/users/${userid}`,{
+            let userid = document.getElementById('userid').innerText;
+            console.log(`userid ${userid}`);
+            console.log(`data ${userid}`);
+            axios.patch(`/users/${userid}`,{data}).then(response=>{
+                if(response.status === 200){
+                    Notification.displayNotification('success',response.data);
+                    let id = setTimeout(()=>{
+                        document.getElementById('usersLink').click();
+                    },2000);
+                }
+            }).catch(err=>{
+                throw new Error('Could not update user');
             });
     }catch(err){
         Notification.displayNotification('error',err);
     }
+    event.preventDefault();
+    ele.disabled = false;
 }
 
 function getFormData(){

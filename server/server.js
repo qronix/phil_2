@@ -13,6 +13,7 @@ const {authenticate} = require('./middleware/authenticate');
 const validator = require('validator');
 const signedCookieSecret = '!@@!#12vvF123424!@VV!124415142';
 const {grabPromos} = require('./utils/grabpromos');
+const {ObjectID} = require('mongodb'); 
 // !@@!#12vvF123424!@VV!124415142
 
 var app = express();
@@ -172,6 +173,7 @@ app.get('/users/:id',authenticate,async (req,res)=>{
     try{
         if(req.user){
             const id = req.params.id;
+            //add id validation
             let editingUser = await User.findById(id);
             let roles = await Role.find().select({"rolename":1,"_id":0});
             res.render('useredit.hbs',{
@@ -179,6 +181,7 @@ app.get('/users/:id',authenticate,async (req,res)=>{
                 email:editingUser.email,
                 userid:editingUser._id,
                 name:editingUser.name,
+                enabled:editingUser.enabled,
                 role:editingUser.role,
                 roles
             });
@@ -214,15 +217,25 @@ app.patch('/users/:id',authenticate, async (req,res)=>{
         if(req.user){
             let role = await Role.findOne({"rolename":req.user.role});
             if(role.permissions.edituser){
-                console.log('Can edit users');
+                if(!ObjectID.isValid(req.params.id)){
+                    res.send('Invalid user id');
+                }
+                let data = req.body.data;
+                let id = req.params.id;
+                if(data.password === "" || data.confirmPassword === ""){
+                    delete data.password;
+                    delete data.confirmPassword;
+                }
+                await User.updateUser(id,data);
+                res.send('User has been updated');
             }else{
-                console.log('No permission');
+                res.send('You do not have permission to do that')
             }
         }else{
-            console.log('User not found');
+            res.send('User was not found');
         }
     }catch(err){
-        console.log(err);
+        res.send('An error occurred');
     }
 });
 

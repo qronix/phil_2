@@ -15,6 +15,7 @@ var authenticate = async (req,res,next)=>{
                     req.role = role;
                     req.user = user;
                     req.token = cookies.token;
+                    res.cookie('username',user.username,{signed:true});
                     next();
                 }else{
                    res.redirect('/');

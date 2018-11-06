@@ -79,6 +79,24 @@ UserSchema.methods.generateAuthToken = function(){
     });
 };
 
+UserSchema.statics.updateUser = function(id,data){
+   var User = this;
+   return new Promise((resolve,reject)=>{
+        User.findById(id,(error,userDoc)=>{
+            if(userDoc){
+                for(let value in data){
+                    userDoc[value] = data[value];
+                }
+            }
+            userDoc.save();
+            if(error){
+               reject('Could not update user');
+            }
+            resolve('User has been updated');
+        });
+    });
+};
+
 UserSchema.statics.findByCredentials = async function(username,password){
     var User = this;
     let user = await User.findOne({username});
@@ -144,11 +162,19 @@ UserSchema.pre('save',function(next){
         bcrypt.genSalt(10,(err,salt)=>{
             bcrypt.hash(password,salt,(err,hash)=>{
                 user.password = hash;
+                console.log(`New hash is: ${hash}`);
                 next();
             });
         });
     }else{
         next();
+    }
+});
+
+UserSchema.pre('findByIdAndUpdate',function(next){
+    var user = this;
+    if(user.isModified('password')){
+        console.log('password has been changed');
     }
 });
 

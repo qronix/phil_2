@@ -149,7 +149,18 @@ body{
     background-color: #1dd1a1;
     color:#f5f6fa;
 }
-
+#enabledPanel{
+    margin-top: 10px;
+    padding-top: 10px;
+    justify-content: baseline;
+}
+#enabledLabel{
+    float: left;
+}
+#enableUserCheck{
+    margin-top: 4px;
+    margin-left: 20px;
+}
 
 /***************END USER PANEL*******************/
 
