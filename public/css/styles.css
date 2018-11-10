@@ -114,6 +114,9 @@ body{
     flex-direction: column;
     max-width: 20vw;
 }
+#usereditPanel input{
+    width: 100%;
+}
 #usereditPanel label{
     color:#f5f6fa;
     margin-bottom: 5px;

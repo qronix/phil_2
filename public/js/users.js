@@ -27,28 +27,28 @@ function cancelEdit(event,ele){
 
 function submitUserEdit(event,ele){
     try{
-            ele.disabled = true;
-            let data = getFormData();
-            let dashboard = document.getElementById('dashboard');
-            let userid = document.getElementById('userid').innerText;
-            console.log(`userid ${userid}`);
-            console.log(`data ${userid}`);
-            axios.patch(`/users/${userid}`,{data}).then(response=>{
-                if(response.status === 200){
-                    Notification.displayNotification('success',response.data);
-                    let id = setTimeout(()=>{
-                        document.getElementById('usersLink').click();
-                    },2000);
-                }
-            }).catch((err)=>{
-                console.log(err.data);
-                Notification.displayNotification('error',err.response.data);
-            });
+        ele.disabled = true;
+        let data = getFormData();
+        let dashboard = document.getElementById('dashboard');
+        let userid = document.getElementById('userid').innerText;
+        console.log(`userid ${userid}`);
+        console.log(`data ${userid}`);
+        axios.patch(`/users/${userid}`,{data}).then(response=>{
+            if(response.status === 200){
+                Notification.displayNotification('success',response.data);
+                let id = setTimeout(()=>{
+                    document.getElementById('usersLink').click();
+                },2000);
+            }
+        }).catch((err)=>{
+            console.log(err.data);
+            Notification.displayNotification('error',err.response.data);
+        });
     }catch(err){
         Notification.displayNotification('error',err);
     }
     event.preventDefault();
-    ele.disabled = true;
+    ele.disabled = false;
 }
 
 function getFormData(){

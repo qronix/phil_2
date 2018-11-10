@@ -102,9 +102,9 @@ app.post('/users',async (req,res)=>{
 app.post('/role',authenticate,async(req,res)=>{
     try{
         if(req.user){
-            const role = await Role.findOne({rolename:req.user.role});
-            console.log(role);
-            if(role.permissions.addrole[0]){
+            const userRole = await Role.findOne({rolename:req.user.role});
+            console.log(userRole.permissions.addrole);
+            if(userRole.permissions.addrole){
                 const role = new Role(_.pick(req.body,["rolename","permissions"]));
                 await role.save();
                 res.status(200).send('Successfully added role');
@@ -113,7 +113,7 @@ app.post('/role',authenticate,async(req,res)=>{
             }
         }
     }catch(err){
-        console.log(err);
+        res.status(400).send('Could not add role');
     }
 });
 
@@ -156,11 +156,11 @@ app.get('/users',authenticate, async (req,res)=>{
         if(req.user){
             let users = await User.find({}).select({"tokens":0,"password":0,"__v":0});
             let role = await Role.findOne({rolename:req.user.role});
-            if(role.permissions.viewusers[0]){
+            if(role.permissions.viewusers){
                 res.render('users.hbs',{
                     pageTitle: "PHIL v2.0 | Phones",
                     username:req.user.username,
-                    canedit:role.permissions.edituser[0],
+                    canedit:role.permissions.edituser,
                     users
                 });
             }
@@ -202,12 +202,12 @@ app.get('/dashboard',authenticate, async (req,res)=>{
     try{
         if(req.user){
             let {viewphones,viewusers} = req.role.permissions;
-            console.log(`Can view users: ${viewusers[0]}`);
+            console.log(`Can view users: ${viewusers}`);
             res.render('dashboard.hbs',{
                 pageTitle:"PHIL v2.0 | Dashboard",
                 username:req.user.username,
-                viewphones:viewphones[0],
-                viewusers:viewusers[0]
+                viewphones:viewphones,
+                viewusers:viewusers
             });
         }else{
             res.redirect('/');
@@ -221,7 +221,7 @@ app.delete('/users/:id',authenticate, async(req,res)=>{
     try{
         if(req.user){
             let role = await Role.findOne({"rolename":req.user.role});
-            if(role.permissions.deleteuser[0]){
+            if(role.permissions.deleteuser){
                 if(!ObjectID.isValid(req.params.id)){
                     return res.status(400).send('Invalid user id');
                 }
@@ -252,19 +252,36 @@ app.patch('/users/:id',authenticate, async (req,res)=>{
         if(req.user){
             let role = await Role.findOne({"rolename":req.user.role});
             console.log(`User role is: ${role.permissions.edituser}`);
-            if(role.permissions.edituser[0]){
+            if(role.permissions.edituser){
                 console.log('Editing user');
                 if(!ObjectID.isValid(req.params.id)){
                     return res.status(400).send('Invalid user id');
                 }
                 let data = req.body.data;
                 let id = req.params.id;
+                if(!validator.isEmail(data.email)){
+                    return res.status(400).send('Invalid email provided. User not updated');
+                }
+                for(let value in data){
+                    if(value !== "password" && value !== "confirmPassword"){
+                        if(data[value]==="" || data[value] === undefined){
+                            return res.status(400).send(`An invalid value for ${value} was provided`);
+                        }
+                    }
+                }
                 if(data.password === "" || data.confirmPassword === ""){
                     delete data.password;
                     delete data.confirmPassword;
                 }
-                await User.updateUser(id,data);
-                res.send('User has been updated');
+                try{
+                    let response = await User.updateUser(id,data);
+                    console.log(`Got response ${response}`);
+                    res.send('User has been updated');
+                }catch(err){
+                    console.log(`Got err as ${err}`);
+                    return res.status(400).send(err);
+                    console.log(`Got res as ${response}`);
+                }
             }else{
                 return res.status(401).send('You do not have permission to do that')
             }
@@ -272,7 +289,8 @@ app.patch('/users/:id',authenticate, async (req,res)=>{
             return res.status(400).send('User was not found');
         }
     }catch(err){
-        return res.status(400).send('An error occurred');
+        // return res.status(400).send(err.errmsg);
+        return res.status(400).send('An error occurred. Could not update user.');
     }
 });
 

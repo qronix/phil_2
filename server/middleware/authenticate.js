@@ -11,7 +11,7 @@ var authenticate = async (req,res,next)=>{
             let user = await User.findByToken(cookies.token);
             if(user){
                 if(user.enabled){
-                    let role = await Role.findOne({rolename:user.role});
+                   let role = await Role.findOne({rolename:user.role});
                     req.role = role;
                     req.user = user;
                     req.token = cookies.token;

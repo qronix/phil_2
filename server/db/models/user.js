@@ -88,11 +88,40 @@ UserSchema.statics.updateUser = function(id,data){
                     userDoc[value] = data[value];
                 }
             }
-            userDoc.save();
+            User.findOne({'email':data.email}).then((doc)=>{
+                if(doc){
+                    const docID = doc._id.toHexString();
+                    if(docID !== id){
+                        reject('Email is already in use');
+                    }
+                }
+            });
+            User.findOne({'username':data.username}).then((doc)=>{
+                if(doc){
+                    const docID = doc._id.toHexString();
+                    if(docID !== id){
+                        reject('Username is already in use');
+                    }
+                }
+            });
+                userDoc.save()
+                .then((doc)=>{
+                    if(!doc){
+                        reject('Could not update user');
+                    }else{
+                        resolve('User has been updated');
+                    }
+                })
+                .catch((err)=>{
+                    // if(err.errmsg.includes('duplicate key')){
+                    //     reject('User already exists.');
+                    // }
+                    reject('Could not update user');
+                });
+
             if(error){
                reject('Could not update user');
             }
-            resolve('User has been updated');
         });
     });
 };
