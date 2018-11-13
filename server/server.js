@@ -86,7 +86,11 @@ app.get('/users/add',authenticate,async (req,res)=>{
     try{
         const canAddUser = req.role.permissions.adduser;
         if(canAddUser){
-            console.log(`Can add user:${canAddUser}`);
+            const roles = await Role.find({});
+            res.render('adduser.hbs',{
+                pageTitle:'PHIL v2.0 | Add user',
+                roles
+            });
         }else{
             console.log('NOOOOOO');
             console.log(`Can add user:${canAddUser}`);
@@ -98,15 +102,26 @@ app.get('/users/add',authenticate,async (req,res)=>{
 
 //create user route
 // TODO check if user role is valid
-app.post('/users',async (req,res)=>{
+app.post('/users',authenticate, async (req,res)=>{
     try{
-        console.log(_.pick(req.body,["username","password"]));
-        const user = new User(_.pick(req.body,["username","email","role","password","name"]));
-        await user.save();
-        const token = await user.generateAuthToken();
-        res.header('x-auth',token).send(user);
+        if(req.role.permissions.adduser){
+            const user = new User(_.pick(req.body.data,["username","email","role","password","name"]));
+            console.log(`New user is ${JSON.stringify(user,undefined,2)}`);
+            try{
+                let createdUser = await user.save();
+                if(createdUser.username){
+                    res.status(200).send('User successfully created');
+                }else{
+                    res.status(400).send('User could not be created');
+                }
+            }catch(err){
+                res.status(400).send(err);
+            }
+        }else{
+            res.status(401).send('You do not have permission to do that');
+        }
     }catch(err){
-        res.status(400).send(err);
+        res.status(400).send('User could not be created');
     }
 });
 
@@ -174,6 +189,7 @@ app.get('/users',authenticate, async (req,res)=>{
                     pageTitle: "PHIL v2.0 | Phones",
                     username:req.user.username,
                     canedit:role.permissions.edituser,
+                    canadduser:role.permissions.adduser,
                     users
                 });
             }
@@ -296,7 +312,7 @@ app.patch('/users/:id',authenticate, async (req,res)=>{
                     console.log(`Got res as ${response}`);
                 }
             }else{
-                return res.status(401).send('You do not have permission to do that')
+                return res.status(401).redirect('/');
             }
         }else{
             return res.status(400).send('User was not found');

@@ -1,3 +1,5 @@
 <div id='userEditToolsPanel'>
-    <button id='addUser' class="button" onclick="addUser(event,this)"><span id='addSign'>&#43;</span><span id='addBtnText'>Add user</span></button>
+    {{#if canadduser}}
+        <button id='addUser' class="button" onclick="addUser(event,this)"><span id='addSign'>&#43;</span><span id='addBtnText'>Add user</span></button>
+    {{/if}}
 </div>

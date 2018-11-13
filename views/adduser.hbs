@@ -1,0 +1,26 @@
+<form id='usereditPanel'>
+    <label for='username'>Username</label>
+    <input id='username' type="text" required="required">
+    <label for="name">Name</label>
+    <input id='name' type="text" required="required">
+    <label for='email'>Email</label>
+    <input type="email" id='email' required="required">
+    <label for='password'>Password</label>
+    <input type="password" id='password'>
+    <label for='confirmPassword'>Confirm password</label>
+    <input type="password" id='confirmPassword'>
+    <div id='enabledPanel'>
+        <label for='enabled' id='enabledLabel'>Enabled</label>
+        <input type="checkbox" id='enableUserCheck' checked="checked">
+    </div>
+    <label for='role'>Role</label>
+    <select id='role'>
+       {{# each roles}}
+            <option value="{{this.rolename}}">{{this.rolename}}</option>
+       {{/each}}
+    </select>
+    <div id='usereditPanelButtons'>
+        <button id='cancel' class="button" onclick="cancelEdit(event,this)">Cancel</button>
+        <button id='submit' class="button" onclick="submitNewUser(event,this)">Save</button>
+    </div>
+</form>

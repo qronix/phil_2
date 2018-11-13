@@ -207,6 +207,19 @@ UserSchema.pre('findByIdAndUpdate',function(next){
     }
 });
 
+UserSchema.post('save',function(error,doc,next){
+    return new Promise((resolve,reject)=>{
+        if(error.name === 'MongoError' && error.code === 11000){
+            if(error.errmsg.includes('username')){
+                reject(next('Username already exists'));
+            }
+            if(error.errmsg.includes('email')){
+                reject(next('Email already in use'));
+            }
+        }
+    });
+});
+
 var User = mongoose.model('User',UserSchema);
 
 module.exports={

@@ -51,6 +51,32 @@ function submitUserEdit(event,ele){
     ele.disabled = false;
 }
 
+function submitNewUser(event,ele){
+    try{
+        ele.disabled = true;
+        let data = getFormData();
+        let dashboard = document.getElementById('dashboard');
+        axios.post(`/users`,{data}).then(response=>{
+            console.log(`Got status ${response.status}`);
+            if(response.status === 200){
+                Notification.displayNotification('success',response.data);
+                let id = setTimeout(()=>{
+                    document.getElementById('usersLink').click();
+                },2000);
+            }else{
+                window.location.href = "/";
+            }
+        }).catch((err)=>{
+            console.log(err.data);
+            Notification.displayNotification('error',err.response.data);
+        });
+    }catch(err){
+        Notification.displayNotification('error',err);
+    }
+    event.preventDefault();
+    ele.disabled = false;
+}
+
 function getFormData(){
     const targets = document.querySelectorAll('#usereditPanel input');
     let data = {};
@@ -81,7 +107,6 @@ function checkpasswords(data){
     let {password,confirmPassword} = data;
     if(password!==''||confirmPassword!==''){
         if(password!==confirmPassword){
-            // Notification.displayNotification('error','Passwords do not match');
             throw new Error('Passwords do not match.');
         }else{
             return data;
@@ -93,12 +118,15 @@ function checkpasswords(data){
 
 function addUser(event,ele){ 
     const url = "/users/add";
+    const dashboard = document.getElementById('dashboard');
     axios.get(url)
     .then((response)=>{
-        console.log(`Got response: ${response}`);
+        if(response.status===200){
+            dashboard.innerHTML = response.data;
+        }
     })
     .catch((err)=>{
-        console.log(`Got error: ${err}`);
+        Notification.displayNotification('error','Cannot add user at this time');
     });
 
     event.preventDefault();
