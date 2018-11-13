@@ -1,0 +1,32 @@
+ToDo:
+finish add user page X
+add delete user button X
+
+add roles page
+add roles nav link
+add new role
+edit role
+remove role (server side method to reassign users)
+
+setup phone schema
+add phone
+update phone
+remove phone
+setup phones page
+add new phone page
+
+setup vendor schema
+add new vendor
+update vendor
+remove vendor
+add vendors page
+
+
+token expiration (server side)
+add news feed to dashboard
+overhaul styling
+refactor code
+write unit tests
+test all authenticated routes
+configure environment variable for signed cookie secret
+

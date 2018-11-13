@@ -350,6 +350,16 @@ body{
 
 /***********END Notificaiton Panel*****************/
 
+/*********************ROLES Panel**************************/
+.rolePerm{
+    display: block;
+    /* border: 1px solid red; */
+}
+
+
+
+/*********************END ROLES Panel**********************/
+
 
 /*********LOGIN*****************/
 

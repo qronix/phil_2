@@ -77,6 +77,10 @@ var RoleSchema = new mongoose.Schema({
             type:Boolean,
             default:false
         },
+        viewroles:{
+            type:Boolean,
+            default:false
+        },
         addrole:{
             type:Boolean,
             default:false

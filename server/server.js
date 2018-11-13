@@ -29,6 +29,12 @@ hbs.registerHelper('isRole',function (addingRole,userRole,stuff){
     return addingRole === userRole;
 });
 
+hbs.registerHelper('notInitValue',function(keyName,compValue,value,opts){
+    if(keyName !== compValue){
+        return `<div class="rolePerm">${keyName}</div> ${value}`;
+    }
+});
+
 // hbs.registerHelper('getPromos',grabPromos());
 // process.on('unhandledRejection',(reason,p)=>{
 //     let promise = JSON.stringify(p,undefined,2);
@@ -121,6 +127,21 @@ app.post('/users',authenticate, async (req,res)=>{
         }
     }catch(err){
         res.status(400).send('User could not be created');
+    }
+});
+
+
+app.get('/roles',authenticate,async (req,res)=>{
+    if(req.role.permissions.viewroles){
+        let roles = await Role.find({}).select({"__v":0});
+        for(let role in roles){
+            let count = await User.count({"role":roles[role].rolename});
+            roles[role].count = count;
+        }
+        console.log(JSON.stringify(roles,undefined,2));
+        res.render('roles.hbs',{
+            roles
+        });
     }
 });
 
@@ -230,13 +251,14 @@ app.get('/users/:id',authenticate,async (req,res)=>{
 app.get('/dashboard',authenticate, async (req,res)=>{
     try{
         if(req.user){
-            let {viewphones,viewusers} = req.role.permissions;
+            let {viewphones,viewusers,viewroles} = req.role.permissions;
             console.log(`Can view users: ${viewusers}`);
             res.render('dashboard.hbs',{
                 pageTitle:"PHIL v2.0 | Dashboard",
                 username:req.user.username,
-                viewphones:viewphones,
-                viewusers:viewusers
+                viewphones,
+                viewusers,
+                viewroles
             });
         }else{
             res.redirect('/');
