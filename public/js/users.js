@@ -91,3 +91,15 @@ function checkpasswords(data){
     }
 }
 
+function addUser(event,ele){ 
+    const url = "/users/add";
+    axios.get(url)
+    .then((response)=>{
+        console.log(`Got response: ${response}`);
+    })
+    .catch((err)=>{
+        console.log(`Got error: ${err}`);
+    });
+
+    event.preventDefault();
+}

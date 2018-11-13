@@ -82,6 +82,19 @@ app.post('/users/login',async(req,res)=>{
 });
 
 
+app.get('/users/add',authenticate,async (req,res)=>{
+    try{
+        const canAddUser = req.role.permissions.adduser;
+        if(canAddUser){
+            console.log(`Can add user:${canAddUser}`);
+        }else{
+            console.log('NOOOOOO');
+            console.log(`Can add user:${canAddUser}`);
+        }
+    }catch(err){
+        console.log(`Got error: ${err}`);
+    }
+});
 
 //create user route
 // TODO check if user role is valid
