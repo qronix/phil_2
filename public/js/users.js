@@ -131,3 +131,21 @@ function addUser(event,ele){
 
     event.preventDefault();
 }
+
+function deleteUser(event, ele){
+    const id = document.getElementById('userid').innerText;
+    const url = `/users/${id}`;
+    axios.delete(url)
+    .then((response)=>{
+        if(response.status === 200){
+            Notification.displayNotification('success',response.data);
+            let timeoutId = setTimeout(()=>{
+                document.getElementById('usersLink').click();
+            },2000)
+        }
+    })
+    .catch((err)=>{
+        Notification.displayNotification('error',err);
+    });
+    event.preventDefault();
+}

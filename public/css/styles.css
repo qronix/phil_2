@@ -126,8 +126,12 @@ body{
     margin-top:14px;
 }
 #usereditPanelButtons{
+    width: 100%;
     margin: 0 auto;
     margin-top: 20px;
+    padding: 10px;
+    background-color: #002640;
+    border: 1px solid white;
 }
 /* #usereditPanelButtons button{
     text-align: center;
@@ -151,18 +155,34 @@ body{
 }
 #cancel{
     margin-right: 20px;
-    color:#c0392b;
+    color:#feca57;
 }
 #cancel:hover{
-    background-color: #c0392b;
+    background-color: #feca57;
     color:#f5f6fa;
 }
 #submit{
-    color:#f5f6fa;
+    color:#1dd1a1;
 }
 #submit:hover{
     background-color: #1dd1a1;
     color:#f5f6fa;
+}
+#delete{
+    color:#ff6b6b;
+    /* margin-left: 40px; */
+}
+#delete:hover{
+    background-color: #ff6b6b;
+    color: #f5f6fa;
+}
+.btnRow{
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    margin-bottom: 10px;
 }
 #enabledPanel{
     display: flex;

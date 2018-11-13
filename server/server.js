@@ -92,11 +92,10 @@ app.get('/users/add',authenticate,async (req,res)=>{
                 roles
             });
         }else{
-            console.log('NOOOOOO');
-            console.log(`Can add user:${canAddUser}`);
+            res.status(401).send('You do not have permission to do that');
         }
     }catch(err){
-        console.log(`Got error: ${err}`);
+        res.status(400).send('An error occurred. Could not add user');
     }
 });
 
@@ -216,6 +215,7 @@ app.get('/users/:id',authenticate,async (req,res)=>{
                 name:editingUser.name,
                 enabled:editingUser.enabled,
                 role:editingUser.role,
+                deleteuser:req.role.permissions.deleteuser,
                 roles
             });
         }
