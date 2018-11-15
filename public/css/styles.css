@@ -356,7 +356,82 @@ body{
     /* border: 1px solid red; */
 }
 
+/*Bestbuy blue shade: #004B7F*/
+/*Bestbuy blue shade: #0096FF*/
+/*Bestbuy blue shade: #002640*/
+/*Bestbuy blue shade: #0087E5*/
 
+.roleRow{
+    background-color: #002640;
+    margin-bottom: 40px;
+    padding: 10px;
+    max-width: 500px;
+    height: auto;
+    color:#f5f6fa;
+    user-select: none;
+}
+.roleName{
+    padding: 5px;
+    position: relative;
+    letter-spacing: 1px;
+}
+.roleArrow{
+    position: relative;
+    float: right;
+    margin-right: 10px;
+}
+.clickedArrow{
+    animation: arrowDown 0.2s linear;
+    animation-fill-mode: forwards;
+}
+
+.unclickedArrow{
+    animation: arrowUp 0.2s linear;
+    animation-fill-mode: forwards;
+}
+
+@keyframes arrowDown{
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(90deg);
+    }
+}
+@keyframes arrowUp{
+    from{
+        transform: rotate(90deg);
+    }
+    to{
+        transform: rotate(0deg);
+    }
+}
+.editRolePanel{
+    display:  none;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    width: 100%;
+    max-width: 500px;
+    color: #f5f6fa;
+    background-color: #222;
+    opacity: 0.9;
+    padding:10px 40px 10px 0;
+    border: 1px solid #4e5057;
+}
+
+.editRolePanel > *{
+    flex: 1 1 40%;
+}
+
+.rolePerm{
+    margin-left: 40px;
+}
+
+.rolePerm input{
+    position: relative;
+    top:5px;
+    float: right;
+}
 
 /*********************END ROLES Panel**********************/
 

@@ -1,8 +1,9 @@
 <div id='rolesPanel'>
     {{#each roles}}
-        <div id='roleRow'>
-            <span id='roleName'>{{this.rolename}} ({{this.count}})</span>
-            <div id='editRolePanel'>
+        <div class='roleRow'>
+            <span class='roleName'>{{this.rolename}} ({{this.count}})</span>
+            <span class="roleArrow">></span>
+            <div class='editRolePanel'>
                 {{#each this.permissions as |value|}}
                     {{#notInitValue @key '$init' value}}
                     {{/notInitValue}}

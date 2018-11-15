@@ -31,7 +31,14 @@ hbs.registerHelper('isRole',function (addingRole,userRole,stuff){
 
 hbs.registerHelper('notInitValue',function(keyName,compValue,value,opts){
     if(keyName !== compValue){
-        return `<div class="rolePerm">${keyName}</div> ${value}`;
+        let dataReturn = `<div class="rolePerm"><span>${keyName}</span>`;
+        if(!value){
+            dataReturn+=`<input type="checkbox" class="permCheckBox"></div>`;
+        }
+        if(value){
+            dataReturn+=`<input type="checkbox" class="permCheckBox" checked></div>`;
+        }
+        return dataReturn;
     }
 });
 
