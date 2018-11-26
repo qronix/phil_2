@@ -369,6 +369,11 @@ body{
     height: auto;
     color:#f5f6fa;
     user-select: none;
+    transition: color 0.2s linear;
+}
+
+.roleRow:hover{
+    color: #FFF200;
 }
 .roleName{
     padding: 5px;

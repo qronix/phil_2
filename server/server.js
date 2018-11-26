@@ -33,10 +33,10 @@ hbs.registerHelper('notInitValue',function(keyName,compValue,value,opts){
     if(keyName !== compValue){
         let dataReturn = `<div class="rolePerm"><span>${keyName}</span>`;
         if(!value){
-            dataReturn+=`<input type="checkbox" class="permCheckBox"></div>`;
+            dataReturn+=`<input type="checkbox" class="permCheckBox" permission="${keyName}"></div>`;
         }
         if(value){
-            dataReturn+=`<input type="checkbox" class="permCheckBox" checked></div>`;
+            dataReturn+=`<input type="checkbox" class="permCheckBox" permission="${keyName}" checked></div>`;
         }
         return dataReturn;
     }
@@ -169,6 +169,26 @@ app.post('/role',authenticate,async(req,res)=>{
         }
     }catch(err){
         res.status(400).send('Could not add role');
+    }
+});
+
+app.patch('/role/:id',authenticate,async (req,res)=>{
+    try{
+        if(req.user){
+            const userRole = await Role.findOne({rolename:req.user.role});
+            if(userRole.permissions.editrole){
+                const roleId     = req.params.id;
+                const permission = req.body.permission;
+                const value      = req.body.checked;
+                const setQuery   = `permissions.${permission}`;
+                const role       = await Role.findOneAndUpdate({_id:roleId},{$set:{[setQuery]:value}});
+                if(!role){
+                    console.log('An error occurred');
+                }
+            }
+        }
+    }catch(err){
+        console.log(`Got error: ${err}`);
     }
 });
 

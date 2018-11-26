@@ -27,8 +27,10 @@ function pageIsReady(){
 }
 
 function setupHandlers(){
-    let roleNameRows = document.querySelectorAll('.roleRow');
-    let editPanels   = document.querySelectorAll('.editRolePanel');
+    let roleNameRows         = document.querySelectorAll('.roleRow');
+    let editPanels           = document.querySelectorAll('.editRolePanel');
+    let permissionCheckBoxes = document.querySelectorAll('.permCheckBox');
+     
     roleNameRows.forEach((ele)=>{
         ele.addEventListener("click",()=>toggleStyling(ele));
     });
@@ -36,6 +38,10 @@ function setupHandlers(){
         ele.addEventListener("click",(event)=>{
             event.stopPropagation();
         });
+    });
+
+    permissionCheckBoxes.forEach((ele)=>{
+        ele.addEventListener('click',()=>modifyPermission(ele));
     });
 }
 function toggleStyling(ele){
@@ -66,4 +72,21 @@ function toggleStyling(ele){
         arrow.classList.add('clickedArrow');
         editRolePanel.style.display = "flex";        
     }
+}
+
+function modifyPermission(ele){
+    let permission = ele.getAttribute('permission');
+    let checked    = ele.checked;
+    let roleId     = ele.parentElement.parentElement.getAttribute('id');
+
+    axios.patch(`/role/${roleId}`,{
+        permission,
+        checked
+    })
+    .then((res)=>{
+        console.log(`Got res ${res}`);
+    })
+    .catch((err)=>{
+        console.log(`Got error: ${err}`);
+    });
 }
