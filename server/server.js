@@ -147,7 +147,6 @@ app.get('/roles',authenticate,async (req,res)=>{
             let count = await User.count({"role":roles[role].rolename});
             roles[role].count = count;
         }
-        console.log(JSON.stringify(roles,undefined,2));
         res.render('roles.hbs',{
             roles,
             canaddrole: req.role.permissions.addrole
@@ -161,7 +160,6 @@ app.post('/role',authenticate,async(req,res)=>{
     try{
         if(req.user){
             const userRole = await Role.findOne({rolename:req.user.role});
-            console.log(userRole.permissions.addrole);
             if(userRole.permissions.addrole){
                 const role = new Role(_.pick(req.body,["rolename","permissions"]));
                 await role.save();
@@ -201,7 +199,6 @@ app.get('/role/add',authenticate,async (req,res)=>{
         const userRole = req.role;
         if(userRole.permissions.addrole){
             const templateRole = await Role.findOne({"rolename":"template"});
-            console.log(`Got permissions as ${templateRole.permissions}`);
             res.render('addrole.hbs',{
                 pageTitle:"PHIL v2.0 | Add Role",
                 permissions:templateRole.permissions
@@ -300,7 +297,6 @@ app.get('/dashboard',authenticate, async (req,res)=>{
     try{
         if(req.user){
             let {viewphones,viewusers,viewroles} = req.role.permissions;
-            console.log(`Can view users: ${viewusers}`);
             res.render('dashboard.hbs',{
                 pageTitle:"PHIL v2.0 | Dashboard",
                 username:req.user.username,
@@ -350,9 +346,7 @@ app.patch('/users/:id',authenticate, async (req,res)=>{
     try{
         if(req.user){
             let role = await Role.findOne({"rolename":req.user.role});
-            console.log(`User role is: ${role.permissions.edituser}`);
             if(role.permissions.edituser){
-                console.log('Editing user');
                 if(!ObjectID.isValid(req.params.id)){
                     return res.status(400).send('Invalid user id');
                 }
@@ -374,12 +368,9 @@ app.patch('/users/:id',authenticate, async (req,res)=>{
                 }
                 try{
                     let response = await User.updateUser(id,data);
-                    console.log(`Got response ${response}`);
                     res.send('User has been updated');
                 }catch(err){
-                    console.log(`Got err as ${err}`);
                     return res.status(400).send(err);
-                    console.log(`Got res as ${response}`);
                 }
             }else{
                 return res.status(401).redirect('/');
