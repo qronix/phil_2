@@ -2,11 +2,11 @@ ToDo:
 finish add user page X
 add delete user button X
 
-add roles page
-add roles nav link
+add roles page X
+add roles nav link X
 add new role
-edit role
-remove role (server side method to reassign users)
+edit role X
+remove role (server side method to reassign users or ask for role reassignment)
 
 setup phone schema
 add phone

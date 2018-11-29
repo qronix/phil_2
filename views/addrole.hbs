@@ -1,0 +1,12 @@
+<div id='addRolePanel'>
+    <div id='newRoleNameContainer'>
+        <label for="roleName">Rolename:</label>
+        <input type="text" id='roleName'>
+    </div>
+    <div class="editRolePanel" id='rolePermissions'>
+         {{#each this.permissions as |value|}}
+            {{#notInitValue @key '$init' value}}
+            {{/notInitValue}}
+        {{/each}}
+    </div>
+</div>

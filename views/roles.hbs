@@ -1,4 +1,7 @@
 <div id='rolesPanel'>
+    <div id='rolesToolsPanel'>
+        {{> rolesedittools}}
+    </div>
     {{#each roles}}
         <div class='roleRow'>
             <span class='roleName'>{{this.rolename}} ({{this.count}})</span>

@@ -90,3 +90,18 @@ function modifyPermission(ele){
         console.log(`Got error: ${err}`);
     });
 }
+
+function loadAddRole(event,ele){
+    const dashboard = document.getElementById('dashboard');
+
+    const url = '/role/add';
+    axios.get(url)
+    .then((res)=>{
+        dashboard.innerHTML = res.data;
+    })
+    .catch((err)=>{
+        console.log(`Got error: ${err}`);
+    });
+
+    event.preventDefault();
+}

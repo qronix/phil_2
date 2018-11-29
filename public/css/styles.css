@@ -205,12 +205,15 @@ body{
     padding: 10px;
 }
 
-#addUser{
+#addUser,
+#addRoleButton{
     color:white;
     display: flex;
 }
 
-#addUser:hover{
+#addUser:hover,
+#addRoleButton:hover
+{
     color:#FFF200;
 }
 #addSign{
@@ -218,7 +221,8 @@ body{
     font-size: 1.1em;
 }
 
-#addBtnText{
+#addBtnText,
+#addRoleText{
     position: relative;
     top:1px;
     margin-left: 5px;
@@ -438,6 +442,31 @@ body{
     float: right;
 }
 
+#rolesToolsPanel{
+    width: 100%;
+    height: auto;
+    margin-bottom:20px;
+    background-color: #222;
+    padding: 10px;
+}
+
+#addRolePanel{
+    margin: 0 auto;
+    margin-top:5vh;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    max-width: 20vw;
+}
+
+#rolePermissions{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#newRoleNameContainer{
+    color:#f5f6fa;
+}
 /*********************END ROLES Panel**********************/
 
 

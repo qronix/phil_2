@@ -42,6 +42,8 @@ hbs.registerHelper('notInitValue',function(keyName,compValue,value,opts){
     }
 });
 
+hbs.registerHelper('buildPermissions',)
+
 // hbs.registerHelper('getPromos',grabPromos());
 // process.on('unhandledRejection',(reason,p)=>{
 //     let promise = JSON.stringify(p,undefined,2);
@@ -140,14 +142,15 @@ app.post('/users',authenticate, async (req,res)=>{
 
 app.get('/roles',authenticate,async (req,res)=>{
     if(req.role.permissions.viewroles){
-        let roles = await Role.find({}).select({"__v":0});
+        let roles = await Role.find({"rolename":{$ne:"template"}}).select({"__v":0});
         for(let role in roles){
             let count = await User.count({"role":roles[role].rolename});
             roles[role].count = count;
         }
         console.log(JSON.stringify(roles,undefined,2));
         res.render('roles.hbs',{
-            roles
+            roles,
+            canaddrole: req.role.permissions.addrole
         });
     }
 });
@@ -192,6 +195,24 @@ app.patch('/role/:id',authenticate,async (req,res)=>{
     }
 });
 
+app.get('/role/add',authenticate,async (req,res)=>{
+    if(req.user){
+        const user = req.user;
+        const userRole = req.role;
+        if(userRole.permissions.addrole){
+            const templateRole = await Role.findOne({"rolename":"template"});
+            console.log(`Got permissions as ${templateRole.permissions}`);
+            res.render('addrole.hbs',{
+                pageTitle:"PHIL v2.0 | Add Role",
+                permissions:templateRole.permissions
+            });
+        }else{
+            res.status(401).send('You do not have permission to do that!');
+        }
+    }else{
+        res.redirect('/');
+    }
+});
 //home page
 app.get('/',authenticate,(req,res)=>{
     if(req.user){
