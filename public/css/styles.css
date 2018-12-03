@@ -134,6 +134,13 @@ body{
     background-color: #002640;
     border: 1px solid white;
 }
+#addRolePanelButtons{
+    max-width: 500px;
+    margin: 10px 0;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
 /* #usereditPanelButtons button{
     text-align: center;
     padding: 3px 10px;
@@ -452,17 +459,20 @@ body{
 }
 
 #addRolePanel{
+    width: 100%;
+    max-width: 100%;
     margin: 0 auto;
     margin-top:5vh;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
-    max-width: 20vw;
+    /* max-width: 20vw; */
 }
 
 #rolePermissions{
     display: flex;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
+    /* max-width: 500px; */
 }
 
 #newRoleNameContainer{

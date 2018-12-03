@@ -112,6 +112,21 @@ function cancelNewRole(event,ele){
     event.preventDefault();
 }
 
+function clickRoleLink(){
+    const roleLink = document.getElementById('rolesLink');
+    const timerId = setTimeout(()=>{
+        roleLink.click();
+    },2000);
+}
+
+function disableButtons(){
+    const submitBtn = document.getElementById('submit');
+    const cancelBtn = document.getElementById('cancel');
+
+    submitBtn.disabled = true;
+    cancelBtn.disabled = true;
+}
+
 function submitNewRole(event,ele){
     try{
         if(rolename=checkrolename()){
@@ -123,7 +138,10 @@ function submitNewRole(event,ele){
                         data
                     })
                     .then((res)=>{
-                        console.log(`Got response: ${res}`);
+                        Notification.displayNotification('success',res.data);
+                        disableButtons();
+                        debugger;
+                        clickRoleLink();
                     })
                     .catch((err)=>{
                         console.log(`Got error: ${err}`);
