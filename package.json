@@ -28,6 +28,8 @@
   },
   "devDependencies": {
     "expect": "^23.6.0",
+    "gulp": "^3.9.1",
+    "gulp-livereload": "^4.0.1",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.5",
     "supertest": "^3.3.0"

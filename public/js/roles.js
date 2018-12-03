@@ -114,7 +114,6 @@ function cancelNewRole(event,ele){
 
 function submitNewRole(event,ele){
     try{
-        debugger;
         if(rolename=checkrolename()){
             if(permissions = getPermissions()){
                 const data = buildRoleData(rolename, permissions);
