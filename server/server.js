@@ -147,6 +147,7 @@ app.get('/roles',authenticate,async (req,res)=>{
             let count = await User.count({"role":roles[role].rolename});
             roles[role].count = count;
         }
+        console.log(`Can delete role: ${req.role.permissions.deleterole}`);
         res.render('roles.hbs',{
             roles,
             canaddrole: req.role.permissions.addrole,

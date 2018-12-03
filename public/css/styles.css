@@ -478,6 +478,13 @@ body{
 #newRoleNameContainer{
     color:#f5f6fa;
 }
+
+.deleteRoleButtonContainer{
+    margin-top: 20px;
+    /* border: 1px solid red; */
+    display: flex;
+    justify-content: flex-end;
+}
 /*********************END ROLES Panel**********************/
 
 
