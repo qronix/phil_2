@@ -176,11 +176,11 @@ body{
     background-color: #1dd1a1;
     color:#f5f6fa;
 }
-#delete{
+.deleteButton{
     color:#ff6b6b;
     /* margin-left: 40px; */
 }
-#delete:hover{
+.deleteButton:hover{
     background-color: #ff6b6b;
     color: #f5f6fa;
 }

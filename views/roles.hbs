@@ -12,6 +12,11 @@
                     {{#notInitValue @key '$init' value}}
                     {{/notInitValue}}
                 {{/each}}
+                {{#if candeleterole}}
+                    <div class='deleteRoleButtonContainer'>
+                        <button class="button deleteButton" id={{this._id}} onclick="deleteRole(event,this)">Delete</button>
+                    </div>
+                {{/if}}
             </div>
         </div>
     {{/each}}

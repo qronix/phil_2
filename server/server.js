@@ -149,7 +149,8 @@ app.get('/roles',authenticate,async (req,res)=>{
         }
         res.render('roles.hbs',{
             roles,
-            canaddrole: req.role.permissions.addrole
+            canaddrole: req.role.permissions.addrole,
+            candeleterole: req.role.permissions.deleterole
         });
     }
 });
