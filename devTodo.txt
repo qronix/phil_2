@@ -4,7 +4,7 @@ add delete user button X
 
 add roles page X
 add roles nav link X
-add new role
+add new role 
 edit role X
 remove role (server side method to reassign users or ask for role reassignment)
 

@@ -161,15 +161,34 @@ app.post('/role',authenticate,async(req,res)=>{
         if(req.user){
             const userRole = await Role.findOne({rolename:req.user.role});
             if(userRole.permissions.addrole){
-                const role = new Role(_.pick(req.body,["rolename","permissions"]));
-                await role.save();
-                res.status(200).send('Successfully added role');
+                console.dir(req.body.data);
+                console.log(req.body.data.permissions);
+                const role = new Role(_.pick(req.body.data,["rolename","permissions"]));
+                // console.log(JSON.stringify(role));
+                if(role.rolename.length >=3){
+                    try{
+                        newRole = await role.save();
+                        console.log(newRole);
+                        if(newRole){
+                            return res.status(200).send('Successfully added new role.');
+                        }else{
+                            return res.status(400).send('Could not create new role.');
+                        }
+                    }catch(err){
+                        return res.status(400).send('Role already exists');
+                    }
+                }else{
+                    return res.status(404).send('Rolename is invalid');
+                }
             }else{
-                res.status(401).send('You do not have persmission to add this role');
+                return res.status(401).send('You do not have persmission to add this role');
             }
+        }else{
+            return res.redirect('/');
         }
     }catch(err){
-        res.status(400).send('Could not add role');
+        console.log(err);
+        return res.status(400).send('Could not add role');
     }
 });
 

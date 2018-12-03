@@ -27,11 +27,11 @@ function pageIsReady(){
 }
 
 function setupHandlers(){
-    let roleNameRows         = document.querySelectorAll('.roleRow');
+    let rolenameRows         = document.querySelectorAll('.roleRow');
     let editPanels           = document.querySelectorAll('.editRolePanel');
     let permissionCheckBoxes = document.querySelectorAll('.permCheckBox');
      
-    roleNameRows.forEach((ele)=>{
+    rolenameRows.forEach((ele)=>{
         ele.addEventListener("click",()=>toggleStyling(ele));
     });
     editPanels.forEach((ele)=>{
@@ -46,7 +46,7 @@ function setupHandlers(){
 }
 function toggleStyling(ele){
     /*Ele children:
-        0 = span with roleName
+        0 = span with rolename
         1 = span with arrow
         2 = editRolePanel
 
@@ -104,4 +104,75 @@ function loadAddRole(event,ele){
     });
 
     event.preventDefault();
+}
+
+function cancelNewRole(event,ele){
+    const rolesLink = document.getElementById('rolesLink');
+    rolesLink.click();
+    event.preventDefault();
+}
+
+function submitNewRole(event,ele){
+    try{
+        debugger;
+        if(rolename=checkrolename()){
+            if(permissions = getPermissions()){
+                const data = buildRoleData(rolename, permissions);
+                if(data){
+                    const url = '/role';
+                    axios.post(url,{
+                        data
+                    })
+                    .then((res)=>{
+                        console.log(`Got response: ${res}`);
+                    })
+                    .catch((err)=>{
+                        console.log(`Got error: ${err}`);
+                    });
+                }
+            }else{
+                Notification.displayNotification('error','Permission data is invalid');
+                return false;
+            }
+        }else{
+            Notification.displayNotification('error','rolename is invalid');
+            return false;
+        }
+    }catch(err){
+        console.log(`Error occurred ${err}`);
+        Notification.displayNotification('error','An error occurred, could not submit new role');
+    }
+    event.preventDefault();
+}
+
+function checkrolename(){
+    const rolename = document.getElementById('roleName').value.trim();
+    if(rolename.length === 0 || rolename==='' || rolename===undefined){
+        return false;
+    }else{
+        return rolename;
+    }
+}
+
+function getPermissions(){
+    const permissions = document.querySelectorAll('.rolePerm');
+    return permissions;
+}
+
+function buildRoleData(rolename, permissionData){
+    let permissions = {};
+    if(permissionData.length !==0){
+        permissionData.forEach((item)=>{
+            let permissionName = item.children[0].innerText;
+            let permissionValue = item.children[1].checked;
+            permissions[permissionName] = permissionValue;
+        });
+        let data = {
+            rolename,
+            permissions
+        };
+        return data;
+    }else{
+        throw new Error('Permissions data is invalid');
+    }
 }

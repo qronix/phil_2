@@ -93,6 +93,10 @@ var RoleSchema = new mongoose.Schema({
             type:Boolean,
             default:false
         },
+        viewroles:{
+            type:Boolean,
+            default:false
+        }
     }
     // permissionlevel:{
     //     type:Number,
