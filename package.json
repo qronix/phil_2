@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon server/server.js",
     "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha server/**/*.test.js",
-    "test-watch": "nodemon --exec \"npm test\""
+    "test-watch": "nodemon --exec \"npm test\"",
+    "pretest": "eslint --ignore-path .gitignore ."
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +28,8 @@
     "xregexp": "^4.2.0"
   },
   "devDependencies": {
+    "eslint": "^5.9.0",
+    "eslint-config-strongloop": "^2.1.0",
     "expect": "^23.6.0",
     "gulp": "^3.9.1",
     "gulp-livereload": "^4.0.1",
