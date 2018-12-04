@@ -214,6 +214,29 @@ app.patch('/role/:id',authenticate,async (req,res)=>{
     }
 });
 
+app.delete('/role/:id',authenticate,async (req,res)=>{
+    if(req.user){
+        if(req.role.permissions.deleterole){
+            //if no users are assigned to the role -> delete role
+                //check for completion
+                    //if success
+                        //return 200 status with confirmation
+                    //if failure
+                        //return 400 status with notice
+            //if users ARE assigned to the role -> confirm reassignment
+                //check for edit user permission
+                    //if has edit user permission
+                        //reassign role and send confirmation with status 200
+                    //else
+                        //return error message with 401 status
+        }else{
+            res.status(401).send('You don\'t have permission to do that');
+        }
+    }else{
+        res.redirect('/');
+    }
+});
+
 app.get('/role/add',authenticate,async (req,res)=>{
     if(req.user){
         const user = req.user;

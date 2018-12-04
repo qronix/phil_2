@@ -6,7 +6,10 @@ add roles page X
 add roles nav link X
 add new role X
 edit role X
-remove role (server side method to reassign users or ask for role reassignment)
+remove role (server side method to reassign users or ask for role reassignment) 
+
+//If no users are assigned to the role -> finish deletion of role
+//If users are assigned to role -> Popup confirmation window which ask for role reassignment
 
 setup phone schema
 add phone
