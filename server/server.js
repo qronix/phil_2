@@ -217,18 +217,63 @@ app.patch('/role/:id',authenticate,async (req,res)=>{
 app.delete('/role/:id',authenticate,async (req,res)=>{
     if(req.user){
         if(req.role.permissions.deleterole){
-            //if no users are assigned to the role -> delete role
-                //check for completion
-                    //if success
-                        //return 200 status with confirmation
-                    //if failure
-                        //return 400 status with notice
-            //if users ARE assigned to the role -> confirm reassignment
-                //check for edit user permission
-                    //if has edit user permission
-                        //reassign role and send confirmation with status 200
-                    //else
-                        //return error message with 401 status
+            try{
+                const roleToDelete = await Role.findById(req.params.id);
+                if(!roleToDelete){
+                    return res.status(400).send('Role does not exist');
+                }
+                const roleToDeleteName = roleToDelete.rolename;
+                //could speed this up by checking for only ONE assignee
+                const assignees  = await User.find({"role":roleToDelete.rolename});
+                const assigneeCount = assignees.length;
+
+                if(roleToDeleteName === "template"){
+                    return res.status(400).send('Cannot delete template role');
+                }
+                if(assigneeCount === 0){
+                    const response = await Role.deleteOne({"rolename":roleToDeleteName});
+                    if(response){
+                         if(response.ok===1){
+                             return res.status(200).send('Role successfully deleted');
+                         }else{
+                             return res.status(400).send('Role could not be deleted');
+                         }
+                    }else{
+                        return res.status(400).send('An error occurred, role not deleted.');
+                    }
+                }
+                if(assigneeCount>=1){
+                    if(req.role.permissions.edituser){
+                        let replacementRole = "";
+                        if(req.body.replacementRole){
+                            replacementRole = req.body.replacementRole;
+                            const resassignResponse = await User.updateMany(
+                                {"role":roleToDeleteName},
+                                {$set:{"role":replacementRole}}
+                            );
+                            if(resassignResponse.nModified === assigneeCount){
+                                const responseMessage = `All users reassigned to ${replacementRole}.`;
+                                const deleteRoleResponse = await Role.deleteOne({"rolename":roleToDeleteName});
+                                if(deleteRoleResponse.ok === 1){
+                                    responseMessage+= `The ${roleToDeleteName} has been deleted.`;
+                                    return res.status(200).send(responseMessage);
+                                }else{
+                                    responseMessage += `However, the role ${roleToDeleteName} could not be deleted.`;
+                                    return res.status(200).send(responseMessage);
+                                }
+                            }else{
+                                return res.status(400).send('Could no reassign all users, role not deleted.');
+                            }
+                        }else{
+                            return res.status(400).send('A replacement role must be assigned to existing role members');
+                        }
+                    }else{
+                        return res.status(401).send('You do not have permission to reassign user roles');
+                    }
+                }
+            }catch(err){
+                console.log(`Got err ${err}`);
+            }
         }else{
             res.status(401).send('You don\'t have permission to do that');
         }
